@@ -3,6 +3,8 @@ import Link from "next/link";
 import { auth, firebase } from "../lib/firebase";
 
 const index = () => {
+  console.log(auth);
+  console.log(firebase);
   return (
     <App>
       <div>
