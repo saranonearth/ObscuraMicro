@@ -1,10 +1,8 @@
 import App from "../components/App";
 import Link from "next/link";
-import { useRouter } from "next/router";
+import { auth, firebase } from "../lib/firebase";
 
 const index = () => {
-  const router = useRouter();
-  console.log(router);
   return (
     <App>
       <div>
