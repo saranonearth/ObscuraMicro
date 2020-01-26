@@ -1,10 +1,8 @@
 import App from "../components/App";
 import Link from "next/link";
 import {auth,firebase} from '../lib/firebase';
-import firebaseConfig from '../firebase.config';
 
 const index = () => {
-  firebase.initializeApp(firebaseConfig);
   console.log(auth);
   console.log(firebase);
   return (
