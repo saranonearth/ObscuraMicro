@@ -34,6 +34,9 @@ const index = () => {
       const token = result.credential.accessToken;
       const user = result.user;
       Router.push('/game');
+    }).catch((error)=>{
+      const errorCode = error.code;
+      const errorMessage = error.message;
     });
   }
 >>>>>>> c954af9... Game page now opens after authentication is complete.
