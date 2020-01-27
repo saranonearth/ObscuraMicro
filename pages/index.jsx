@@ -6,16 +6,18 @@ import {auth,firebase} from '../lib/firebase';
 const index = () => {
   console.log(auth);
   console.log(firebase);
+  //To authenticate user when they log in.
   const loginHandler = ()=>{
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase.auth().signInWithPopup(provider).then((result)=>{
       const token = result.credential.accessToken;
       const user = result.user;
-      Router.push('/game');
+      console.log('The current user is ',user.toJSON());
     }).catch((error)=>{
       const errorCode = error.code;
       const errorMessage = error.message;
     });
+    Router.push('/game');
   }
   return (
     <App>
