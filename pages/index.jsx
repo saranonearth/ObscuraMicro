@@ -1,23 +1,13 @@
-import App from "../components/App";
 import Link from "next/link";
 import Router from "next/router";
-import { auth, firebase} from "../lib/firebase";
-import database from 'firebase';
+import { auth, firebase } from "../lib/firebase";
+import { useContext } from "react";
+import Store from "../Store/Context";
 
 const index = () => {
-  //To add data of a single user to the database.
-  const addData = (userId,name) =>{
-    const defaultDatabase = firebase.database();
-    console.log('Database initialised');
-    defaultDatabase
-      .ref('/')
-      .set({
-        Id: userId,
-        Name: name,
-      });
-    console.log('Added Data');
-  };
-  //To authenticate the user.
+  const { state, dispatch } = useContext(Store);
+  console.log("STATE", state);
+  console.log("DISPATCH", dispatch);
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -36,12 +26,10 @@ const index = () => {
       });
   };
   return (
-    <App>
-      <div>
-        <h1>Index here bruh</h1>
-        <button onClick={loginHandler}>Google Log in</button>
-      </div>
-    </App>
+    <div>
+      <h1>Index here bruh</h1>
+      <button onClick={loginHandler}>Google Log in</button>
+    </div>
   );
 };
 
