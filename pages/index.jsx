@@ -1,9 +1,23 @@
 import App from "../components/App";
 import Link from "next/link";
 import Router from "next/router";
-import { auth, firebase } from "../lib/firebase";
+import { auth, firebase} from "../lib/firebase";
+import database from 'firebase';
 
 const index = () => {
+  //To add data of a single user to the database.
+  const addData = (userId,name) =>{
+    const defaultDatabase = firebase.database();
+    console.log('Database initialised');
+    defaultDatabase
+      .ref('/')
+      .set({
+        Id: userId,
+        Name: name,
+      });
+    console.log('Added Data');
+  };
+  //To authenticate the user.
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -12,8 +26,9 @@ const index = () => {
       .then(result => {
         const token = result.credential.accessToken;
         const user = result.user;
+        const userId = user.uid;
         console.log(token, user);
-        Router.push("/game");
+        addData(userId,'Hardik');
       })
       .catch(error => {
         const errorCode = error.code;
@@ -25,6 +40,7 @@ const index = () => {
       <div>
         <h1>Index here bruh</h1>
         <button onClick={loginHandler}>Google Log in</button>
+        <button onClick={addData}>Check</button>
       </div>
     </App>
   );
