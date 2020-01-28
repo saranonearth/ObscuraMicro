@@ -9,15 +9,21 @@ const index = () => {
   const { state, dispatch } = useContext(Store);
   console.log("STATE", state);
   console.log("DISPATCH", dispatch);
-  const addUser = (userId)=>{
+  const checkUser = (userId)=>{
     const db = firebase.firestore();
     db
-      .collection('user')
+      .collection('users')
       .doc(userId)
-      .set({
-        Name:'fusionmaster7',
-        Bio:'Nothing',
-        Ques: 0
+      .get()
+      .then((doc)=>{
+        if(doc.exists){
+          Router.push('/game');
+        }else{
+          Router.push('/onboard');
+        }
+      })
+      .catch((error)=>{
+        console.log('Error getting document',error);
       });
   };
   const loginHandler = () => {
@@ -30,7 +36,7 @@ const index = () => {
         const user = result.user;
         const userId = user.uid;
         console.log(token, user);
-        addUser(userId);
+        checkUser(userId);
       })
       .catch(error => {
         const errorCode = error.code;
