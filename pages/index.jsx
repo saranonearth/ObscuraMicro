@@ -40,7 +40,6 @@ const index = () => {
       <div>
         <h1>Index here bruh</h1>
         <button onClick={loginHandler}>Google Log in</button>
-        <button onClick={addData}>Check</button>
       </div>
     </App>
   );
