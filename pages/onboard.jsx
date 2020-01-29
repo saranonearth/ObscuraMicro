@@ -1,44 +1,76 @@
-import Router from 'next/router';
-import {auth,firebase} from '../lib/firebase';
-import firestore from 'firebase';
-const onboard = ()=>{
-    const addUser = (newUser,userId) =>{
-        const db = firebase.firestore();
-        db
-            .collection('users')
-            .doc(userId)
-            .set({
-                Name: newUser.Name,
-                Bio: newUser.Bio,
-                Ques: 0
-            });
-        Router.push('/game');
+import { useState, useEffect, useContext } from "react";
+import { firebase } from "../lib/firebase";
+import { useRouter } from "next/router";
+import Store from "../Store/Context";
+const onboard = () => {
+  const { state, dispatch } = useContext(Store);
+  const [istate, setState] = useState({
+    gameName: "",
+    bio: ""
+  });
+  const router = useRouter();
+  useEffect(() => {
+    if (state.isAuth) {
+      router.push("/game");
     }
-    const clickHandler = ()=>{
-        const newUser = {
-            Name: document.getElementById('gamename').value,
-            Bio: document.getElementById('bio').value
-        };
-        const user = firebase.auth().currentUser;
-        const userId = user.uid;
-        addUser(newUser,userId);
-    };
-    return(
+  }, [state]);
+
+  const handleChange = e => {
+    setState({
+      ...istate,
+      [e.target.name]: e.target.value
+    });
+  };
+  const handleSubmit = async e => {
+    e.preventDefault();
+    const { gameName, bio } = istate;
+    await firebase
+      .database()
+      .ref("users/" + router.query.w)
+      .set({
+        gameName,
+        bio,
+        levelsSolved: [
+          {
+            king: true
+          }
+        ]
+      })
+      .then(() => {
+        dispatch({
+          type: "ONBOARD",
+          payload: {
+            gameName,
+            bio
+          }
+        });
+      });
+  };
+  return (
+    <div>
+      <form onSubmit={handleSubmit}>
         <div>
-            <h1>Welcome to ObscurA!</h1>
-            <h2>Please enter your details!</h2>
-            <form>
-                <input 
-                type="text" 
-                name="username" 
-                placeholder="ObscurA Game Name"
-                id="gamename">
-                </input>
-                <br />
-                <textarea id="bio"></textarea>
-            </form>
-            <button onClick={clickHandler}>Play ObscurA</button>
+          <label htmlFor="gameName">Game Name</label>
+          <br />
+          <input type="text" name="gameName" onChange={handleChange} required />
         </div>
-    );
+        <div>
+          <label htmlFor="bio">Bio</label>
+          <br />
+          <input
+            type="text"
+            name="bio"
+            maxLength={30}
+            onChange={handleChange}
+            required
+          />
+        </div>
+        <div>
+          <button type="submit">Submit</button>
+        </div>
+      </form>
+    </div>
+  );
 };
+
 export default onboard;
