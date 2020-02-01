@@ -4,7 +4,8 @@ import {
 
 const Store = createContext({
     user: null,
-    isAuth: false
+    isAuth: false,
+    loading: true
 })
 
 export default Store;

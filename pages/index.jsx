@@ -9,8 +9,14 @@ const index = () => {
   const { state, dispatch } = useContext(Store);
   useEffect(() => {
     firebase.auth().onAuthStateChanged(authUser => {
-      const uid = authUser.uid;
-      authUtil(authUser, uid);
+      if(authUser) {
+        const uid = authUser.uid;
+        authUtil(authUser, uid);
+      }else {
+        dispatch({
+          type: "LOADING",
+        });
+      }
     });
   }, []);
   const loginHandler = () => {
@@ -72,12 +78,18 @@ const index = () => {
         console.log(error);
       });
   };
-  return (
-    <div>
-      <h1>Index here bruh</h1>
-      <button onClick={loginHandler}>Google Log in</button>
-    </div>
-  );
+  if(state.loading) {
+    return(
+      <h1>Loading</h1>
+    );
+  }else {
+    return (
+      <div>
+        <h1>Index here bruh</h1>
+        <button onClick={loginHandler}>Google Log in</button>
+      </div>
+    );
+  }
 };
 
 export default index;
