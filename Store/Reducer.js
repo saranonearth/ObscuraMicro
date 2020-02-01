@@ -32,7 +32,12 @@ export default function (state, action) {
                                     ...payload
                                 }
                         }
-                        default:
-                            return state
+                        case "LOADING":
+                            return {
+                                ...state,
+                                loading: false,
+                            }
+                            default:
+                                return state
     }
 }
