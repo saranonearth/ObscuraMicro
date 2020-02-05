@@ -5,7 +5,7 @@ import {
 const Store = createContext({
     user: null,
     isAuth: false,
-    loading: true
+    loading: false
 })
 
 export default Store;
