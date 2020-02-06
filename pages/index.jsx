@@ -87,7 +87,7 @@ const index = () => {
   }else{
     return(
       <div>
-        <h1>Index here bruh</h1>
+        <h1>Index Here bruh</h1>
         <button onClick={loginHandler}>Google Log in</button>
       </div>
     );
