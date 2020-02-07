@@ -1,7 +1,16 @@
 const Loading = ()=>{
     return(
         <div>
-            <h1>Loading</h1>
+            <style jsx>{`
+                display: flex;
+                height: 90vh;
+                justify-content: center;
+                align-items: center;
+            `}
+            </style>
+            <div>
+                <h1>Loading</h1>
+            </div>
         </div>
     );
 };

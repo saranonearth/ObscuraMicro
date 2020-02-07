@@ -2,21 +2,21 @@ import Router from "next/router";
 import { firebase } from "../lib/firebase";
 import { useContext, useEffect } from "react";
 import Store from "../Store/Context";
-import Loading from './loading';
+import Loading from "./loading";
 
 const index = () => {
   const { state, dispatch } = useContext(Store);
   useEffect(() => {
     dispatch({
-      type:"LOADING_BEGIN"
+      type: "LOADING_BEGIN"
     });
-    firebase.auth().onAuthStateChanged(authUser=>{
-      if(authUser){
+    firebase.auth().onAuthStateChanged(authUser => {
+      if (authUser) {
         const uid = authUser.uid;
-        authUtil(authUser,uid);
-      }else {
+        authUtil(authUser, uid);
+      } else {
         dispatch({
-          type:"LOADING_END"
+          type: "LOADING_END"
         });
       }
     });
@@ -71,7 +71,9 @@ const index = () => {
           Router.push({
             pathname: "/onboard",
 
-            query: { w: uid }
+            query: {
+              w: uid
+            }
           });
         }
       })
@@ -80,15 +82,13 @@ const index = () => {
         console.log(error);
       });
   };
-  if(state.loading){
-    return(
-      <Loading />
-    );
-  }else{
-    return(
+  if (state.loading) {
+    return <Loading />;
+  } else {
+    return (
       <div>
-        <h1>Index Here bruh</h1>
-        <button onClick={loginHandler}>Google Log in</button>
+        <h1> Index here bruh </h1>{" "}
+        <button onClick={loginHandler}> Google Log in </button>{" "}
       </div>
     );
   }
