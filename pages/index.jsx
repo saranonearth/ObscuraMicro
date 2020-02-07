@@ -3,6 +3,9 @@ import { firebase } from "../lib/firebase";
 import { useContext, useEffect } from "react";
 import Store from "../Store/Context";
 import Loading from "./loading";
+import NavBar from 'react-bootstrap/Navbar';
+import Button from 'react-bootstrap/Button';
+import Nav from 'react-bootstrap/Nav';
 
 const index = () => {
   const { state, dispatch } = useContext(Store);
@@ -82,16 +85,22 @@ const index = () => {
         console.log(error);
       });
   };
-  if (state.loading) {
-    return <Loading />;
-  } else {
-    return (
-      <div>
-        <h1> Index here bruh </h1>{" "}
-        <button onClick={loginHandler}> Google Log in </button>{" "}
-      </div>
-    );
-  }
+  const header = (
+    <div>  
+      <NavBar bg="light" expand="xs">
+        <NavBar.Brand><h1>ObscurA</h1></NavBar.Brand>
+        <Nav>
+          <Nav.Item>
+            <Button variant="outline-dark" className="pull-right" onClick={loginHandler}>Play Game!</Button>
+          </Nav.Item>
+        </Nav>
+      </NavBar>
+    </div>
+  );
+  if(state.loading)
+    return <Loading />
+  else
+    return header
 };
 
 export default index;
