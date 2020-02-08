@@ -9,6 +9,10 @@ class MyApp extends App {
       <>
         <Head>
           <title>ObscurA Micro</title>
+          <link
+            href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900i&display=swap"
+            rel="stylesheet"
+          ></link>
         </Head>
         <Provider>
           <Component {...pageProps} />
