@@ -6,9 +6,11 @@ import Loading from "./loading";
 import NavBar from 'react-bootstrap/Navbar';
 import Button from 'react-bootstrap/Button';
 import Nav from 'react-bootstrap/Nav';
+import {Container} from 'react-bootstrap';
+import Leaderboard from './leaderboard';
 
 const index = () => {
-  const { state, dispatch } = useContext(Store);
+  /*const { state, dispatch } = useContext(Store);
   useEffect(() => {
     dispatch({
       type: "LOADING_BEGIN"
@@ -23,7 +25,7 @@ const index = () => {
         });
       }
     });
-  }, []);
+  }, []);*/
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -85,22 +87,25 @@ const index = () => {
         console.log(error);
       });
   };
-  const header = (
-    <div>  
-      <NavBar bg="light" expand="xs">
-        <NavBar.Brand><h1>ObscurA</h1></NavBar.Brand>
-        <Nav>
-          <Nav.Item>
-            <Button variant="outline-dark" className="pull-right" onClick={loginHandler}>Play Game!</Button>
-          </Nav.Item>
-        </Nav>
-      </NavBar>
+  const header = (  
+    <NavBar style={{backgroundColor:'#fafafa'}} expand="xs">
+      <NavBar.Brand><h1>ObscurA Micro</h1></NavBar.Brand>
+      <Nav>
+        <Nav.Item>
+          <Button variant="outline-dark" className="pull-right" onClick={loginHandler}><h4>Play Game</h4></Button>
+        </Nav.Item>
+      </Nav>
+    </NavBar>
+  );
+  return (
+    <div>
+      {header}
+      <hr />
+      <Container>
+        <Leaderboard />
+      </Container>
     </div>
   );
-  if(state.loading)
-    return <Loading />
-  else
-    return header
 };
 
 export default index;
