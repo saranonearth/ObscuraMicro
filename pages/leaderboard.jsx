@@ -4,12 +4,12 @@ const Leaderboard = ()=>{
     return(
         <Row>
             <Col xs="12" lg="6">
-                <Card className="shadow" id="leaderCard">
+                <Card id="leaderCard">
                     <Card.Title id="c1">
                         <h3>Current Leaderboard</h3>
                     </Card.Title>
                     <hr />
-                    <Table borderless hover>
+                    <Table borderless hover id="leaderTable">
                         <thead>
                             <tr>
                                 <th>SNo.</th>
@@ -19,15 +19,15 @@ const Leaderboard = ()=>{
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr id="leaderRow">
                                 <td>1</td>
                                 <td>fusionmaster7</td>
                                 <td>2</td>
                                 <td>0</td>
                             </tr>
-                            <tr>
+                            <tr id="leaderRow">
                                 <td>2</td>
-                                <td>saranoearth</td>
+                                <td>saranonearth</td>
                                 <td>2</td>
                                 <td>1</td>
                             </tr>
@@ -36,12 +36,12 @@ const Leaderboard = ()=>{
                 </Card>
             </Col>
             <Col>
-                <Card className="shadow" id="leaderCard">
+                <Card id="leaderCard">
                     <Card.Title id="c1">
                         <h3>Previous Winners</h3>
                     </Card.Title>
                     <hr />
-                    <Table borderless hover>
+                    <Table borderless hover id="leaderTable">
                         <thead>
                             <tr>
                                 <th>Day</th>
@@ -49,7 +49,7 @@ const Leaderboard = ()=>{
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
+                            <tr id="leaderRow">
                                 <td>1</td>
                                 <td>fusionmaster7</td>
                             </tr>

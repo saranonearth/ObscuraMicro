@@ -1,7 +1,49 @@
+@import url('https://fonts.googleapis.com/css?family=Poppins|Roboto&display=swap');
+
+body{
+    background-color: #484848;
+}
+#header{
+    background-color: #212121;
+    font-family: 'Poppins',sans-serif;
+    font-weight: bold;
+}
+.play{
+    background-color: #1a237e;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+.play:hover{
+    background-color: #000051;
+    color: white;
+}
 #c1{
     margin-left: 10px;
     padding-top: 20px;
+    font-family: 'Poppins',sans-serif;
+    font-weight: 500;
 }
 #leaderCard{
     margin-top: 20px;
+    background-color: #212121;
+    color: white;
+    box-shadow: 8px 8px 10px black;
+}
+#leaderTable{
+    color: white;
+}
+#leaderRow{
+    font-family: 'Roboto',sans-serif;
+    font-weight: 400;
+}
+#leaderRow:hover{
+    background-color: #1a237e;
+    color: white;
+}
+hr{
+    background-color: white;
+}
+th{
+    font-family: 'Roboto',sans-serif;
 }

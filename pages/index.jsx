@@ -10,7 +10,7 @@ import {Container} from 'react-bootstrap';
 import Leaderboard from './leaderboard';
 
 const index = () => {
-  /*const { state, dispatch } = useContext(Store);
+  const { state, dispatch } = useContext(Store);
   useEffect(() => {
     dispatch({
       type: "LOADING_BEGIN"
@@ -25,7 +25,7 @@ const index = () => {
         });
       }
     });
-  }, []);*/
+  }, []);
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
     firebase
@@ -87,25 +87,28 @@ const index = () => {
         console.log(error);
       });
   };
-  const header = (  
-    <NavBar style={{backgroundColor:'#fafafa'}} expand="xs">
-      <NavBar.Brand><h1>ObscurA Micro</h1></NavBar.Brand>
+  const header = (
+    <NavBar expand="xs" id="header">
+      <NavBar.Brand><h1 style={{color:'#ffffff'}}>ObscurA Micro</h1></NavBar.Brand>
       <Nav>
         <Nav.Item>
-          <Button variant="outline-dark" className="pull-right" onClick={loginHandler}><h4>Play Game</h4></Button>
+          <Button className="play" onClick={loginHandler}><h4 style={{fontWeight:'500'}}>Play Game</h4></Button>
         </Nav.Item>
       </Nav>
     </NavBar>
   );
-  return (
-    <div>
-      {header}
-      <hr />
-      <Container>
-        <Leaderboard />
-      </Container>
-    </div>
-  );
+  if(state.loading) {
+    return <Loading />
+  } else {
+    return (
+      <div>
+        {header}
+        <Container>
+          <Leaderboard />
+        </Container>
+      </div>
+    );
+  }
 };
 
 export default index;
