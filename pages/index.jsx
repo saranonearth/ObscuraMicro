@@ -3,12 +3,9 @@ import { firebase } from "../lib/firebase";
 import { useContext, useEffect } from "react";
 import Store from "../Store/Context";
 import Loading from "./loading";
-import NavBar from 'react-bootstrap/Navbar';
-import Button from 'react-bootstrap/Button';
-import Nav from 'react-bootstrap/Nav';
-import {Container} from 'react-bootstrap';
-import Leaderboard from './leaderboard';
-
+import Navbar from "../components/Navbar";
+import Leaderboard from "../components/Leaderboard";
+import Daily from "../components/Daily";
 const index = () => {
   const { state, dispatch } = useContext(Store);
   useEffect(() => {
@@ -102,10 +99,69 @@ const index = () => {
   } else {
     return (
       <div>
-        {header}
-        <Container>
-          <Leaderboard />
-        </Container>
+        <div className="bar"></div>
+        <Navbar loginHandler={loginHandler} />
+        <div className="banner">
+          <div className="text">
+            Play ObscurA Micro to win goodies and clue keys for the main game!
+          </div>
+        </div>
+        <div className="container">
+          <div className="con-1">
+            <div className="leaderboard">
+              <div className="th tr">
+                <div>Rank</div>
+                <div>Player</div>
+                <div className="mt-l">Solved</div>
+                <div>Time(mins)</div>
+              </div>
+              <div className="tr">
+                <div className="lb-player rk ">
+                  <div>1</div>
+                </div>
+                <div className="lb-player pl">
+                  <div>
+                    <img
+                      className="lb-img"
+                      src="https://via.placeholder.com/150"
+                      alt="userimg"
+                    />
+                  </div>
+                  <div className="pl-n">Saran</div>
+                </div>
+                <div className="lb-player">1/2</div>
+                <div className="lb-player">23</div>
+              </div>
+            </div>
+          </div>
+          <div className="con-2">
+            <p className="sub-title">Previous days winners</p>
+            <div className="daily">
+              <div className="tr th">
+                <div>Player</div>
+                <div>Day</div>
+              </div>
+              <div className="tr">
+                <div className="lb-player">
+                  <div>
+                    <img
+                      className="lb-img"
+                      src="https://via.placeholder.com/150"
+                      alt="userimg"
+                    />
+                  </div>
+                  <div>Saran</div>
+                </div>
+                <div className="center">
+                  <div>Monday</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div className="footer">
+          <div>developed by gawds</div>
+        </div>
       </div>
     );
   }
