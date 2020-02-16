@@ -1,4 +1,4 @@
-const Navbar = ({ loginHandler }) => {
+const Navbar = ({ loginHandler,name }) => {
   return (
     <div>
       <div className="nav">
@@ -6,7 +6,7 @@ const Navbar = ({ loginHandler }) => {
           <div className="title">ObscurA Micro</div>
           <div>
             <button className="btn" onClick={loginHandler}>
-              Play Game
+              {name}
             </button>
           </div>
         </div>

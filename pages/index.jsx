@@ -84,23 +84,13 @@ const index = () => {
         console.log(error);
       });
   };
-  const header = (
-    <NavBar expand="xs" id="header">
-      <NavBar.Brand><h1 style={{color:'#ffffff'}}>ObscurA Micro</h1></NavBar.Brand>
-      <Nav>
-        <Nav.Item>
-          <Button className="play" onClick={loginHandler}><h4 style={{fontWeight:'500'}}>Play Game</h4></Button>
-        </Nav.Item>
-      </Nav>
-    </NavBar>
-  );
-  if(state.loading) {
+  if (state.loading) {
     return <Loading />
   } else {
     return (
       <div>
         <div className="bar"></div>
-        <Navbar loginHandler={loginHandler} />
+        <Navbar loginHandler={loginHandler} name="Play ObscurA"/>
         <div className="banner">
           <div className="text">
             Play ObscurA Micro to win goodies and clue keys for the main game!
@@ -134,30 +124,7 @@ const index = () => {
               </div>
             </div>
           </div>
-          <div className="con-2">
-            <p className="sub-title">Previous days winners</p>
-            <div className="daily">
-              <div className="tr th">
-                <div>Player</div>
-                <div>Day</div>
-              </div>
-              <div className="tr">
-                <div className="lb-player">
-                  <div>
-                    <img
-                      className="lb-img"
-                      src="https://via.placeholder.com/150"
-                      alt="userimg"
-                    />
-                  </div>
-                  <div>Saran</div>
-                </div>
-                <div className="center">
-                  <div>Monday</div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <Daily />
         </div>
         <div className="footer">
           <div>developed by gawds</div>
