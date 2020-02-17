@@ -36,30 +36,40 @@ const game = () => {
       <div className="container">
         <div className="gm-ar">
           <div className="gm">
-            <h1 
-            style={{marginBottom:'15px'}}
-            >Timer Text here</h1>
-
-            <img src="https://via.placeholder.com/250"></img>
-            <form>
-              <input 
-              type="text" 
-              name="ans"
-              placeholder="Type your answer here"
-              style={{margin:'15px 0px'}}
-              ></input>
-            </form>
+            <div className="ques">
+              <div style={{padding:'15px',textAlign:'left'}}>
+                <h2>Timer Text here</h2>
+              </div>
+              <img src="https://via.placeholder.com/200" />
+              <form>
+                <input 
+                type="text" 
+                name="answer" 
+                placeholder="Answer"
+                className="ans"
+                >
+                </input>
+              </form>
+            </div>
+            <div className="instruct">
+              <div style={{padding:'20px 0px'}}>
+                <h2>Instructions</h2>
+                <p style={{marginTop:'5px'}}>
+                  Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.<br /> 
+                  Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.<br /> 
+                  Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.<br /> 
+                  Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+                </p>
+              </div>
+            </div>
           </div>
-          <div>
-            <Leaderboard />
-          </div>
-        </div>
-        <div className="gm-ar">
-          <div className="instruct">
-            <h1>Instructions here</h1>
-          </div>
-          <div>
-            <Daily />
+          <div className="info">
+            <div>
+              <Leaderboard />
+            </div>
+            <div className="daily-div">
+              <Daily />
+            </div>
           </div>
         </div>
       </div>

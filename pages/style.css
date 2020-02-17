@@ -74,6 +74,7 @@ body {
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
+    margin-bottom: 30px;
 }
 
 .leaderboard {
@@ -179,22 +180,40 @@ body {
 }
 .gm-ar{
     display: flex;
+    justify-content: space-around;
     width: 100%;
-    justify-content: space-between;
-    flex-wrap: wrap;
-    margin-bottom: 25px;
 }
 .gm{
-    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
-    border-radius: 6px;
-    margin-top: -50px;
     width: 50%;
     text-align: center;
 }
 .instruct{
     box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
     border-radius: 6px;
-    width: 50%;
+    background-color: #ffffff;
+}
+.ques{
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    margin-bottom: 30px;
+    background-color: #ffffff;
+    margin-top: -50px;
+}
+.ans{
+    margin: 15px 0px;
+    font-size: 24px;
+    text-align: center;
+}
+.daily-div{
+    box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+    border-radius: 6px;
+    margin-top: 30px;
+    background-color: #ffffff;
+    width: fit-content;
+}
+.con-2{
+    padding: 20px;
+    width: 100%;
 }
 @media (max-width:800px) {
 
@@ -220,7 +239,7 @@ body {
 
     .leaderboard {
         width: 100%;
-
+        margin-top: 30px;
     }
 
     .daily {
@@ -243,12 +262,10 @@ body {
         flex-direction: column;
         margin-left: -20px;
     }
-    .gm-ar {
+    .gm-ar{
         display: block;
-        text-align: center;
     }
     .gm{
-        margin-bottom: 75px;
         width: 100%;
     }
 }
