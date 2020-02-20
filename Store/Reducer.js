@@ -8,29 +8,29 @@ export default function (state, action) {
             return {
                 ...state,
                 loading: false,
-                isAuth: true,
+                    isAuth: true,
                     user: payload.user
             }
             case 'LOGOUT':
                 return {
                     ...state,
                     loading: false,
-                    isAuth: false,
+                        isAuth: false,
                         user: null
                 }
                 case "USER":
                     return {
                         ...state,
                         loading: false,
-                        user: {
-                            ...payload
-                        }
+                            user: {
+                                ...payload
+                            }
                     }
                     case "ONBOARD":
                         return {
                             ...state,
                             isAuth: true,
-                            loading: false,
+                                loading: false,
                                 user: {
                                     ...state.user,
                                     ...payload

@@ -31,10 +31,16 @@ const index = () => {
       .then(result => {
         let User = result.user;
         const uid = User.uid;
+        dispatch({
+          type: "LOADING_BEGIN"
+        });
         authUtil(User, uid);
       })
       .catch(error => {
         console.log(error);
+        dispatch({
+          type: "LOADING_END"
+        });
       });
   };
   const authUtil = (User, uid) => {
@@ -44,6 +50,9 @@ const index = () => {
       .ref("/users/" + uid)
       .once("value")
       .then(res => {
+        dispatch({
+          type: "LOADING_END"
+        });
         console.log("getUser");
         console.log(res.val());
         rUser = res.val();
@@ -63,6 +72,9 @@ const index = () => {
           });
         } else {
           dispatch({
+            type: "LOADING_END"
+          });
+          dispatch({
             type: "USER",
             payload: {
               image: User.photoURL,
@@ -80,6 +92,9 @@ const index = () => {
         }
       })
       .catch(error => {
+        dispatch({
+          type: "LOADING_END"
+        });
         console.log("getUserError");
         console.log(error);
       });
@@ -90,7 +105,7 @@ const index = () => {
     return (
       <div>
         <div className="bar"></div>
-        <Navbar loginHandler={loginHandler} />
+        <Navbar state={state} loginHandler={loginHandler} />
         <div className="banner">
           <div className="text">
             Play ObscurA Micro to win goodies and clue keys for the main game!
