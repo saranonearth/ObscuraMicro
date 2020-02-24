@@ -51,7 +51,7 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
-            <p className="mt"><Timer endTime = {new Date(2020,2,25,3,0,0)}</p>
+            <p className="mt"><Timer endTime = {new Date(2020,2,25,3,0,0)} /></p>
 
             <img
               src="https://via.placeholder.com/150"
