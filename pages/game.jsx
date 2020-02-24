@@ -3,7 +3,7 @@ import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
-import Counter from "reactjs-counter";
+import Timer from "../components/Timer";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -51,7 +51,7 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
-            <p className="mt"> 20 mins remaining</p>
+            <p className="mt"><Timer endTime = {new Date(2020,2,25,3,0,0)}</p>
 
             <img
               src="https://via.placeholder.com/150"
