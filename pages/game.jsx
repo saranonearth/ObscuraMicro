@@ -1,9 +1,9 @@
-import { useContext, useEffect, useState } from "react";
+import { useContext, useEffect } from "react";
 import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
-import axios from "axios";
+import Countdown from "react-countdown";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -12,56 +12,7 @@ const game = () => {
       router.push("/");
     }
   }, [state]);
-  const [gstate, setState] = useState({
-    answer: "",
-    message: ""
-  });
-  const handleChange = e => {
-    console.log(gstate);
-    setState({
-      ...gstate,
-      answer: e.target.value
-    });
-  };
 
-  const handleSubmit = async e => {
-    e.preventDefault();
-    if (!gstate.answer) {
-      setState({
-        ...gstate,
-        message: "Answer field is empty"
-      });
-
-      setTimeout(() => {
-        setState({
-          ...gstate,
-          message: ""
-        });
-      }, 3000);
-    } else {
-      try {
-        const body = {
-          answer: gstate.answer
-        };
-        const config = {
-          headers: {
-            "content-type": "application/json"
-          }
-        };
-        console.log("INPUT", { answer: gstate.answer, time: new Date() });
-
-        const res = await axios.post(
-          "http://localhost:5050/check",
-          body,
-          config
-        );
-
-        console.log(res);
-      } catch (error) {
-        console.log(error);
-      }
-    }
-  };
   const logouthandler = () => {
     auth
       .signOut()
@@ -76,7 +27,20 @@ const game = () => {
         console.log(e);
       });
   };
-
+  const Completionist = () => <span>Time up</span>;
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return (
+        <span>
+          {hours}:{minutes}:{seconds}
+        </span>
+      );
+    }
+  };
   return (
     <div>
       <div className="bar"> </div>{" "}
@@ -100,12 +64,11 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
-            {gstate.message ? <p className="alert">{gstate.message}</p> : null}
             <p className="mt">
               <Countdown
                 date={
                   new Date(
-                    "Tue Feb 25 2020 09:11:32 GMT+0530 (India Standard Time"
+                    "Tue Feb 25 2020 13:11:32 GMT+0530 (India Standard Time"
                   )
                 }
                 renderer={renderer}
@@ -118,19 +81,12 @@ const game = () => {
               alt="game-image"
             />
             <br />
-            <form onSubmit={handleSubmit}>
+            <div>
+              <input type="text" />
               <div>
-                <input
-                  type="text"
-                  onChange={handleChange}
-                  value={gstate.answer}
-                  name="answer"
-                />
-                <div>
-                  <button className="btn">Submit</button>
-                </div>
+                <button className="btn">Submit</button>
               </div>
-            </form>
+            </div>
           </div>{" "}
           <br />
           <br />
@@ -159,6 +115,12 @@ const game = () => {
               <div className="lb-player"> 23 </div>{" "}
             </div>{" "}
           </div>{" "}
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
+          <br />
           <br />
           <br />
         </div>{" "}
