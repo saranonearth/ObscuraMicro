@@ -100,9 +100,17 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
-            <p className="mt"> 20 mins remaining</p>
-
             {gstate.message ? <p className="alert">{gstate.message}</p> : null}
+            <p className="mt">
+              <Countdown
+                date={
+                  new Date(
+                    "Tue Feb 25 2020 09:11:32 GMT+0530 (India Standard Time"
+                  )
+                }
+                renderer={renderer}
+              />
+            </p>
 
             <img
               src="https://via.placeholder.com/150"
