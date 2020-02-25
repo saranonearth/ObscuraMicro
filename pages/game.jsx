@@ -60,6 +60,7 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
+<<<<<<< HEAD
             <p className="mt">
             <Countdown
               date={new Date(
@@ -68,6 +69,9 @@ const game = () => {
               renderer={renderer}
               />
             </p>
+=======
+            <p className="mt"><Timer endTime = {new Date(2020,2,25,3,0,0)} /></p>
+>>>>>>> 2adcc821cdc49f247d8ea042206dcbc0b93ad361
 
             <img
               src="https://via.placeholder.com/150"
