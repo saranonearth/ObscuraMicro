@@ -91,7 +91,8 @@ body {
   box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
   border-radius: 6px;
   color: #a1a1a1;
-  margin-top: -50px;
+  margin-top: -70px;
+  margin-bottom: 30px;
 }
 
 .daily {
@@ -142,6 +143,13 @@ body {
   display: flex;
   justify-content: right !important;
 }
+.card {
+  width: 600px;
+  background-color: white;
+  box-shadow: 0 5px 10px rgba(0, 0, 0, 0.12);
+  border-radius: 6px;
+  padding: 30px;
+}
 
 .daily {
   color: #a1a1a1;
@@ -157,9 +165,11 @@ body {
   font-weight: 600;
   padding: 20px 0px 10px 0px;
 }
+
 .mt {
   margin: 10px 0;
 }
+
 .footer {
   position: fixed;
   bottom: 0;
@@ -239,6 +249,15 @@ input {
   width: 210px;
 }
 
+.alert {
+  background-color: #000;
+  color: white;
+  margin: 10px;
+  padding: 5px;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
+  border-radius: 5px;
+}
+
 button {
   border: none;
   background-color: #000;
@@ -246,8 +265,27 @@ button {
   margin-top: 10px;
   padding: 7px 10px;
 }
-
+.con-1 {
+  margin-bottom: 150px;
+}
+.ob-center {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+.mt-0 {
+  margin-top: 10px;
+  text-align: center;
+}
 @media (max-width: 800px) {
+  .con-2 {
+    margin-bottom: 100px;
+  }
+
   .text {
     font-size: 1.5em;
   }
@@ -290,5 +328,15 @@ button {
     display: flex;
     flex-direction: column;
     margin-left: -20px;
+  }
+  .con-1 {
+    margin-bottom: 0px;
+  }
+
+  .ld {
+    padding-bottom: 10px;
+  }
+  .banner2 {
+    height: 30vh;
   }
 }

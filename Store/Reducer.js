@@ -22,6 +22,7 @@ export default function (state, action) {
                     return {
                         ...state,
                         loading: false,
+
                             user: {
                                 ...payload
                             }

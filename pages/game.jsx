@@ -1,9 +1,9 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
-import Counter from "reactjs-counter";
+import axios from "axios";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -12,7 +12,56 @@ const game = () => {
       router.push("/");
     }
   }, [state]);
+  const [gstate, setState] = useState({
+    answer: "",
+    message: ""
+  });
+  const handleChange = e => {
+    console.log(gstate);
+    setState({
+      ...gstate,
+      answer: e.target.value
+    });
+  };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!gstate.answer) {
+      setState({
+        ...gstate,
+        message: "Answer field is empty"
+      });
+
+      setTimeout(() => {
+        setState({
+          ...gstate,
+          message: ""
+        });
+      }, 3000);
+    } else {
+      try {
+        const body = {
+          answer: gstate.answer
+        };
+        const config = {
+          headers: {
+            "content-type": "application/json"
+          }
+        };
+        console.log("INPUT", { answer: gstate.answer, time: new Date() });
+
+        const res = await axios.post(
+          "http://localhost:5050/check",
+          body,
+          config
+        );
+
+        console.log(res);
+      } catch (error) {
+        console.log(error);
+      }
+    }
+  };
   const logouthandler = () => {
     auth
       .signOut()
@@ -53,18 +102,27 @@ const game = () => {
             <p className="c-1">Level 1</p>
             <p className="mt"> 20 mins remaining</p>
 
+            {gstate.message ? <p className="alert">{gstate.message}</p> : null}
+
             <img
               src="https://via.placeholder.com/150"
               className="game-img"
               alt="game-image"
             />
             <br />
-            <div>
-              <input type="text" />
+            <form onSubmit={handleSubmit}>
               <div>
-                <button className="btn">Submit</button>
+                <input
+                  type="text"
+                  onChange={handleChange}
+                  value={gstate.answer}
+                  name="answer"
+                />
+                <div>
+                  <button className="btn">Submit</button>
+                </div>
               </div>
-            </div>
+            </form>
           </div>{" "}
           <br />
           <br />
@@ -93,12 +151,6 @@ const game = () => {
               <div className="lb-player"> 23 </div>{" "}
             </div>{" "}
           </div>{" "}
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
           <br />
           <br />
         </div>{" "}

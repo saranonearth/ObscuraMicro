@@ -1,10 +1,17 @@
-const Navbar = ({ loginHandler, logouthandler, state }) => {
+const Navbar = ({ onBoard, loginHandler, logouthandler, state }) => {
   return (
     <div>
       <div className="nav">
         <div className="navbar">
           <div className="title">ObscurA Micro</div>
-          {state.isAuth ? (
+          {onBoard ? (
+            <div>
+              {" "}
+              <button className="btn" onClick={logouthandler}>
+                Logout
+              </button>
+            </div>
+          ) : state.isAuth ? (
             <div>
               {" "}
               <button className="btn" onClick={logouthandler}>

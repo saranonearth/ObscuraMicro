@@ -1,6 +1,7 @@
 import { useState, useEffect, useContext } from "react";
 import { firebase } from "../lib/firebase";
 import { useRouter } from "next/router";
+import Navbar from "../components/Navbar";
 import Store from "../Store/Context";
 const onboard = () => {
   const { state, dispatch } = useContext(Store);
@@ -30,11 +31,7 @@ const onboard = () => {
       .set({
         gameName,
         bio,
-        levelsSolved: [
-          {
-            king: true
-          }
-        ]
+        levelsSolved: []
       })
       .then(() => {
         dispatch({
@@ -46,29 +43,62 @@ const onboard = () => {
         });
       });
   };
+
+  const logouthandler = () => {
+    auth
+      .signOut()
+      .then(() => {
+        console.log("Done");
+        router.push("/");
+        dispatch({
+          type: "LOGOUT"
+        });
+      })
+      .catch(e => {
+        console.log(e);
+      });
+  };
+
   return (
     <div>
-      <form onSubmit={handleSubmit}>
-        <div>
-          <label htmlFor="gameName">Game Name</label>
-          <br />
-          <input type="text" name="gameName" onChange={handleChange} required />
+      <div className="bar"> </div>
+      <Navbar state={state} onBoard={true} logouthandler={logouthandler} />{" "}
+      <div className="container">
+        <div className=" card ob-center">
+          <form onSubmit={handleSubmit}>
+            <div>
+              <h1>Onboard</h1>
+              <br />
+              <p htmlFor="gameName"> Game Name </p>
+              <input
+                className="mt-0"
+                type="text"
+                name="gameName"
+                onChange={handleChange}
+                required
+              />
+            </div>{" "}
+            <br />
+            <div>
+              <p htmlFor="bio"> Bio </p>
+              <input
+                className="mt-0"
+                type="text"
+                name="bio"
+                maxLength={30}
+                onChange={handleChange}
+                required
+              />
+            </div>{" "}
+            <div>
+              <button className="btn" type="submit">
+                {" "}
+                Submit{" "}
+              </button>{" "}
+            </div>{" "}
+          </form>{" "}
         </div>
-        <div>
-          <label htmlFor="bio">Bio</label>
-          <br />
-          <input
-            type="text"
-            name="bio"
-            maxLength={30}
-            onChange={handleChange}
-            required
-          />
-        </div>
-        <div>
-          <button type="submit">Submit</button>
-        </div>
-      </form>
+      </div>
     </div>
   );
 };
