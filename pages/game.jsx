@@ -3,7 +3,7 @@ import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
-import Timer from "../components/Timer";
+import Countdown from 'react-countdown';
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -27,7 +27,16 @@ const game = () => {
         console.log(e);
       });
   };
-
+  const Completionist = () => <span>Time up</span>;
+  const renderer = ({ hours, minutes, seconds, completed }) => {
+    if (completed) {
+      // Render a completed state
+      return <Completionist />;
+    } else {
+      // Render a countdown
+      return <span>{hours}:{minutes}:{seconds}</span>;
+    }
+  };
   return (
     <div>
       <div className="bar"> </div>{" "}
@@ -51,7 +60,14 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
-            <p className="mt"><Timer endTime = {new Date(2020,2,25,3,0,0)}</p>
+            <p className="mt">
+            <Countdown
+              date={new Date(
+                "Tue Feb 25 2020 09:11:32 GMT+0530 (India Standard Time"
+              )}
+              renderer={renderer}
+              />
+            </p>
 
             <img
               src="https://via.placeholder.com/150"
