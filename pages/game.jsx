@@ -1,9 +1,10 @@
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
+import axios from "axios";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -12,7 +13,74 @@ const game = () => {
       router.push("/");
     }
   }, [state]);
+  const [gstate, setState] = useState({
+    answer: "",
+    message: "",
+    loading: false
+  });
+  const handleChange = e => {
+    console.log(gstate);
+    setState({
+      ...gstate,
+      answer: e.target.value
+    });
+  };
 
+  const handleSubmit = async e => {
+    e.preventDefault();
+    if (!gstate.answer) {
+      setState({
+        ...gstate,
+        message: "Answer field is empty"
+      });
+
+      setTimeout(() => {
+        setState({
+          ...gstate,
+          message: ""
+        });
+      }, 3000);
+    } else {
+      try {
+        const body = {
+          answer: gstate.answer
+        };
+        const config = {
+          headers: {
+            "content-type": "application/json"
+          }
+        };
+        console.log("INPUT", { answer: gstate.answer, time: new Date() });
+        setState({
+          ...gstate,
+          loading: true
+        });
+        const res = await axios.post(
+          "http://localhost:5050/check",
+          body,
+          config
+        );
+        setState({
+          ...gstate,
+          loading: false
+        });
+        console.log(res);
+      } catch (error) {
+        setState({
+          ...gstate,
+          message: "Server Error"
+        });
+
+        setTimeout(() => {
+          setState({
+            ...gstate,
+            message: ""
+          });
+        }, 3000);
+        console.log(error);
+      }
+    }
+  };
   const logouthandler = () => {
     auth
       .signOut()
@@ -27,7 +95,9 @@ const game = () => {
         console.log(e);
       });
   };
+
   const Completionist = () => <span>Time up</span>;
+
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
       // Render a completed state
@@ -41,6 +111,7 @@ const game = () => {
       );
     }
   };
+
   return (
     <div>
       <div className="bar"> </div>{" "}
@@ -64,6 +135,7 @@ const game = () => {
         <div className="con-1">
           <div className="leaderboard wd game-img">
             <p className="c-1">Level 1</p>
+            {gstate.message ? <p className="alert">{gstate.message}</p> : null}
             <p className="mt">
               <Countdown
                 date={
@@ -82,10 +154,21 @@ const game = () => {
             />
             <br />
             <div>
-              <input type="text" />
-              <div>
-                <button className="btn">Submit</button>
-              </div>
+              <form onSubmit={handleSubmit}>
+                <input
+                  type="text"
+                  onChange={handleChange}
+                  value={gstate.answer}
+                  name="answer"
+                />
+                <div>
+                  {gstate.loading ? (
+                    <p className="mt-1">Checking..</p>
+                  ) : (
+                    <button className="btn">Submit</button>
+                  )}
+                </div>
+              </form>
             </div>
           </div>{" "}
           <br />
