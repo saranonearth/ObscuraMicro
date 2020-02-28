@@ -98,9 +98,11 @@ body {
 .daily {
   width: 400px;
 }
+
 .mt-1 {
   margin-top: 10px;
 }
+
 .th {
   font-weight: 500;
   color: black;
@@ -145,6 +147,7 @@ body {
   display: flex;
   justify-content: right !important;
 }
+
 .card {
   width: 600px;
   background-color: white;
@@ -267,9 +270,11 @@ button {
   margin-top: 10px;
   padding: 7px 10px;
 }
+
 .con-1 {
   margin-bottom: 150px;
 }
+
 .ob-center {
   text-align: center;
   display: flex;
@@ -279,10 +284,12 @@ button {
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
 .mt-0 {
   margin-top: 10px;
   text-align: center;
 }
+
 @media (max-width: 800px) {
   .con-2 {
     margin-bottom: 100px;
@@ -309,6 +316,7 @@ button {
 
   .leaderboard {
     width: 340px;
+    margin-top: -30px;
   }
 
   .daily {
@@ -331,6 +339,7 @@ button {
     flex-direction: column;
     margin-left: -20px;
   }
+
   .con-1 {
     margin-bottom: 0px;
   }
@@ -338,7 +347,18 @@ button {
   .ld {
     padding-bottom: 10px;
   }
+
   .banner2 {
     height: 30vh;
+  }
+  .name {
+    font-size: 0.4em !important;
+  }
+  .bio {
+    font-size: 0.3em;
+  }
+  .profile-image {
+    width: 60px;
+    height: 60px;
   }
 }

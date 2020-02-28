@@ -3,6 +3,7 @@ import { firebase } from "../lib/firebase";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 import Store from "../Store/Context";
+import { v4 as uuidv4 } from "uuid";
 const onboard = () => {
   const { state, dispatch } = useContext(Store);
   const [istate, setState] = useState({
@@ -29,6 +30,7 @@ const onboard = () => {
       .database()
       .ref("users/" + router.query.w)
       .set({
+        id: router.query.w,
         gameName,
         bio,
         levelsSolved: []
@@ -37,6 +39,7 @@ const onboard = () => {
         dispatch({
           type: "ONBOARD",
           payload: {
+            id: router.query.w,
             gameName,
             bio
           }
@@ -75,6 +78,7 @@ const onboard = () => {
                 type="text"
                 name="gameName"
                 onChange={handleChange}
+                maxLength={12}
                 required
               />
             </div>{" "}
@@ -85,7 +89,7 @@ const onboard = () => {
                 className="mt-0"
                 type="text"
                 name="bio"
-                maxLength={30}
+                maxLength={20}
                 onChange={handleChange}
                 required
               />

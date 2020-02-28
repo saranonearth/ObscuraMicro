@@ -12,11 +12,26 @@ const game = () => {
     if (!state.isAuth) {
       router.push("/");
     }
+
+    const getLevel = async () => {
+      try {
+        const res = await axios.get(
+          `http://localhost:5050/getlevel/${state.user && state.user.id}`
+        );
+
+        console.log("RESP", res);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    getLevel();
   }, [state]);
   const [gstate, setState] = useState({
     answer: "",
     message: "",
-    loading: false
+    loading: false,
+    level: null
   });
   const handleChange = e => {
     console.log(gstate);
@@ -140,7 +155,7 @@ const game = () => {
               <Countdown
                 date={
                   new Date(
-                    "Tue Feb 25 2020 13:11:32 GMT+0530 (India Standard Time"
+                    "Wed Feb 26 2020 12:30:29 GMT+0530 (India Standard Time)"
                   )
                 }
                 renderer={renderer}
