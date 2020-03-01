@@ -8,6 +8,12 @@ import axios from "axios";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
+  const [gstate, setState] = useState({
+    answer: "",
+    message: "",
+    loading: false,
+    level: null
+  });
   useEffect(() => {
     if (!state.isAuth) {
       router.push("/");
@@ -20,6 +26,11 @@ const game = () => {
         );
 
         console.log("RESP", res);
+
+        setState({
+          ...gstate,
+          level: res.data
+        });
       } catch (error) {
         console.log(error);
       }
@@ -27,12 +38,7 @@ const game = () => {
 
     getLevel();
   }, [state]);
-  const [gstate, setState] = useState({
-    answer: "",
-    message: "",
-    loading: false,
-    level: null
-  });
+
   const handleChange = e => {
     console.log(gstate);
     setState({
@@ -59,14 +65,18 @@ const game = () => {
       try {
         const body = {
           answer: gstate.answer,
-          id: state.user.id,
+          id: state.user.id
         };
         const config = {
           headers: {
             "content-type": "application/json"
           }
         };
-        console.log("INPUT", { answer: gstate.answer, id:state.user.id, time: new Date() });
+        console.log("INPUT", {
+          answer: gstate.answer,
+          id: state.user.id,
+          time: new Date()
+        });
         setState({
           ...gstate,
           loading: true
@@ -76,11 +86,27 @@ const game = () => {
           body,
           config
         );
-        setState({
-          ...gstate,
-          loading: false
-        });
-        console.log(res);
+
+        if (res.data.message === "CORRECT") {
+          setState({
+            ...gstate,
+            loading: false,
+            message: "CORRECT"
+          });
+        } else {
+          setState({
+            ...gstate,
+            loading: false,
+            message: "WRONG"
+          });
+        }
+
+        setTimeout(() => {
+          setState({
+            ...gstate,
+            message: ""
+          });
+        }, 3000);
       } catch (error) {
         setState({
           ...gstate,
@@ -127,7 +153,7 @@ const game = () => {
       );
     }
   };
-
+  console.log("GSTATE", gstate);
   return (
     <div>
       <div className="bar"> </div>{" "}
@@ -150,42 +176,50 @@ const game = () => {
       <div className="container">
         <div className="con-1">
           <div className="leaderboard wd game-img">
-            <p className="c-1">Level 1</p>
-            {gstate.message ? <p className="alert">{gstate.message}</p> : null}
-            <p className="mt">
-              <Countdown
-                date={
-                  new Date(
-                    "Wed Feb 26 2020 12:30:29 GMT+0530 (India Standard Time)"
-                  )
-                }
-                renderer={renderer}
-              />
-            </p>
-
-            <img
-              src="https://via.placeholder.com/150"
-              className="game-img"
-              alt="game-image"
-            />
-            <br />
-            <div>
-              <form onSubmit={handleSubmit}>
-                <input
-                  type="text"
-                  onChange={handleChange}
-                  value={gstate.answer}
-                  name="answer"
+            {gstate.level && gstate.level.message === "GAME_OVER" ? (
+              <>
+                {" "}
+                <p>Game Over</p> <p>See you tomorrow</p>
+              </>
+            ) : (
+              <>
+                <p className="c-1">{gstate.level && gstate.level.data.name}</p>
+                {gstate.message ? (
+                  <p className="alert">{gstate.message}</p>
+                ) : null}
+                <p className="mt">
+                  <Countdown
+                    date={
+                      new Date(`${gstate.level && gstate.level.data.endTime}`)
+                    }
+                    renderer={renderer}
+                  />
+                </p>
+                <img
+                  src={gstate.level && gstate.level.data.data}
+                  className="game-img"
+                  alt="game-image"
                 />
+                <br />
                 <div>
-                  {gstate.loading ? (
-                    <p className="mt-1">Checking..</p>
-                  ) : (
-                    <button className="btn">Submit</button>
-                  )}
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      onChange={handleChange}
+                      value={gstate.answer}
+                      name="answer"
+                    />
+                    <div>
+                      {gstate.loading ? (
+                        <p className="mt-1">Checking..</p>
+                      ) : (
+                        <button className="btn">Submit</button>
+                      )}
+                    </div>
+                  </form>
                 </div>
-              </form>
-            </div>
+              </>
+            )}
           </div>{" "}
           <br />
           <br />
