@@ -58,14 +58,15 @@ const game = () => {
     } else {
       try {
         const body = {
-          answer: gstate.answer
+          answer: gstate.answer,
+          id: state.user.id,
         };
         const config = {
           headers: {
             "content-type": "application/json"
           }
         };
-        console.log("INPUT", { answer: gstate.answer, time: new Date() });
+        console.log("INPUT", { answer: gstate.answer, id:state.user.id, time: new Date() });
         setState({
           ...gstate,
           loading: true
