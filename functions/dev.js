@@ -38,126 +38,125 @@ app.get("/", (req, res) => {
     });
 });
 
-
-
-app.get("/getlevel/:id", (req, res) => {
-    const today = format(new Date(), 'MM/dd/yyyy')
+app.get("/getlevel/:id", (req,res) => {
     const id = req.params.id;
     let user;
     let levels;
-    //getLevels
-
-    //get user
-    db.ref(`/users/${id}`)
-        .once("value").then(res => {
-            user = res.val();
-            console.log('USER', user)
-            db.ref("/levels/")
-                .once("value")
-                .then(res => {
-                    levels = res.val()
-                    console.log("LEVLES", levels.shift())
-                    levels.shift()
-                    if (user.levelsSolved) {
-                        const levelObj = user.levelsSolved.find(e => e.day.toString() === today.toString());
-
-                        if (levelObj.solved === 0) {
-                            const level = levels.find(e => e.name === "level 1")
-
-                            return res.json({
-                                message: 'FOUND',
-                                data: level
-                            })
-                        }
-
-                        if (levelObj.solved === 1) {
-                            const level = levels.find(e => e.name === "level 2")
-
-                            return res.json({
-                                message: 'FOUND',
-                                data: level
-                            })
-                        }
-
-
-                        if (levelObj.solved === 2) {
-                            return res.json({
-                                message: 'GAME_OVER'
-                            })
-                        }
-                    } else {
-                        //if no level for current day object is found
-
-                        db.ref(`/users/${id}`).update({
-                            ...user,
-                            levelsSolved: [{
-                                day: format(new Date(), 'MM/dd/yyyy'),
-                                solved: 0
-                            }]
-                        })
-
-                        const level = levels.find(e => e.name === "level 1")
-
-                        return res.json({
-                            message: 'FOUND',
-                            data: level
-                        })
-                    }
-                })
-                .catch(err => {
-                    console.log(err);
-                });
-
-        })
-
-    //get user accessable level
-
-
-    //send user accessable level
-
-
-
-    return res.json({
-        message: "got it "
-    })
-})
-
-
-
-app.post("/check", (req, res) => {
-    const endTime = "Wed Feb 26 2020 12:30:29 GMT+0530 (India Standard Time)";
-    const now = new Date();
-    const {
-        answer
-    } = req.body;
-    console.log(answer);
-
-    db.ref("/levels/")
-        .once("value")
-        .then(res => {
-            console.log(res.val());
-        })
-        .catch(err => {
-            console.log(err);
-        });
-
-    var isLate = compareAsc(new Date(now), new Date(endTime));
-    console.log(isLate);
-    if (isLate === 1) {
-        return res.json({
-            message: "LATE"
-        });
-    } else {
-        if (answer === "saran") {
-            return res.json({
-                message: "CORRECT"
+    const today = format(new Date(),'MM/dd/yyyy');
+    const levelRef = db.ref("/levels/");
+    const userRef = db.ref(`/users/${id}`)
+    userRef.once("value")
+            .then(snap => {
+                user = snap.val();
+                levelRef.once("value")
+                        .then(snap => {
+                            levels = [...snap.val()];
+                            levels.shift();
+                            if(user.levelsSolved) {
+                                let levelObject = [...user.levelsSolved];
+                                const currentLevel = user.levelsSolved.find(e => e.day.toString() === today.toString());
+                                if(currentLevel) {
+                                    if(currentLevel.solved === 0) {
+                                        const level = levels.find(e => e.name === "level 1");
+                                        return res.json({
+                                            message: 'FOUND',
+                                            data: level
+                                        });
+                                    } else if (currentLevel.solved === 1) {
+                                        const level = levels.find(e => e.name === "level 2");
+                                        return res.json({
+                                            message: 'FOUND',
+                                            data: level
+                                        });
+                                    }
+                                    else {
+                                        return res.json({
+                                            message: 'GAME_OVER'
+                                        });
+                                    }
+                                } else {
+                                    const newLevel = {
+                                        day: today,
+                                        solved: 0
+                                    };
+                                    levelObject.push(newLevel);
+                                    userRef.update({
+                                        ...user,
+                                        levelsSolved: [...levelObject]
+                                    });
+                                    const level = levels.find(e => e.name === "level 1");
+                                    return res.json({
+                                        message: 'FOUND',
+                                        data: level
+                                    });
+                                }   
+                            } else {
+                                userRef.update({
+                                    ...user,
+                                    levelsSolved: [{
+                                        day: today,
+                                        solved: 0
+                                    }]
+                                });
+                                const level = levels.find(e => e.name === "level 1");
+                                return res.json({
+                                    message: 'FOUND',
+                                    data: level
+                                });
+                            } 
+                        });
             });
-        } else {
-            return res.json({
-                message: "WRONG"
+});
+
+app.post("/check",(req,res) => {
+    const now = format(new Date(),'MM/dd/yyyy');
+    let user;
+    const {answer, id} = req.body;
+    const userRef =  db.ref(`/users/${id}`);
+    userRef.once("value")
+            .then(snap => {
+                user = snap.val();
+                const userObject = user.levelsSolved.find(e => e.day.toString() === now.toString());
+                if(userObject.solved === 2) {
+                    return res.json({
+                        message:'GAME_OVER'
+                    });
+                } else {
+                    const levelRef = db.ref(`/levels/${userObject.solved + 1}`);
+                    levelRef.once("value")
+                            .then(snap => {
+                                const level = {...snap.val()};
+                                const isLate = compareAsc(new Date(now),new Date(level.endTime));
+                                if(isLate === 1) {
+                                    return res.json({
+                                        message: 'LATE'
+                                    });
+                                } else {
+                                    if(level.answer === answer) {
+                                        let levels = [...user.levelsSolved];
+                                        const updatedLevel = {
+                                            day: now,
+                                            solved: userObject.solved + 1
+                                        };
+                                        levels.pop();
+                                        levels.push(updatedLevel);
+                                        userRef.update({
+                                            ...user,
+                                            levelsSolved: [...levels],
+                                        });
+                                        return res.json({
+                                            message: 'CORRECT'
+                                        });
+                                    } else {
+                                        return res.json({
+                                            message: 'WRONG'
+                                        });
+                                    }
+                                }
+                            });
+                }
+
             });
-        }
-    }
 });
 
 app.listen(5050, () => {
