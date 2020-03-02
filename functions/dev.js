@@ -2,7 +2,8 @@ const functions = require("firebase-functions");
 const admin = require("firebase-admin");
 const {
     format,
-    compareAsc
+    compareAsc,
+    differenceInMinutes
 } = require("date-fns");
 const cors = require("cors")({
     origin: true
@@ -104,8 +105,14 @@ app.get("/getlevel/:id", (req,res) => {
                                     data: level
                                 });
                             } 
-                        });
-            });
+                        })
+                        .catch(error => {
+                            console.log(error.code);
+                        })
+            })
+            .catch(error => {
+                console.log(error.code);
+            })
 });
 
 app.post("/check",(req,res) => {
@@ -113,13 +120,15 @@ app.post("/check",(req,res) => {
     let user;
     const {answer, id} = req.body;
     const userRef =  db.ref(`/users/${id}`);
+    const lbRef = db.ref("/leaderboard/");
     userRef.once("value")
             .then(snap => {
                 user = snap.val();
                 const userObject = user.levelsSolved.find(e => e.day.toString() === now.toString());
                 if(userObject.solved === 2) {
                     return res.json({
-                        message:'GAME_OVER'
+                        message: 'GAME_OVER',
+                        data: null
                     });
                 } else {
                     const levelRef = db.ref(`/levels/${userObject.solved + 1}`);
@@ -134,7 +143,7 @@ app.post("/check",(req,res) => {
                                 } else {
                                     if(level.answer === answer) {
                                         let levels = [...user.levelsSolved];
-                                        const updatedLevel = {
+                                        let updatedLevel = {
                                             day: now,
                                             solved: userObject.solved + 1
                                         };
@@ -144,18 +153,81 @@ app.post("/check",(req,res) => {
                                             ...user,
                                             levelsSolved: [...levels],
                                         });
-                                        return res.json({
-                                            message: 'CORRECT'
-                                        });
+                                        const solveTime = differenceInMinutes(new Date(level.endTime),new Date(now)); 
+                                        lbRef.once("value")
+                                             .then(snap => {
+                                                let currentLb = [...snap.val()];
+                                                let todayLb = snap.val().find(e => e.day.toString() === now.toString());
+                                                let users = [...todayLb.users];
+                                                let lbUser = users.find(e => e.gameName === user.gameName);
+                                                if(!lbUser) {
+                                                    admin.auth().getUser(id)
+                                                         .then(res => {
+                                                            const lbInfo = {
+                                                                gameName: user.gameName,
+                                                                photoURL: res.photoURL,
+                                                                solved: 0,
+                                                                solveTime : [solveTime,0]
+                                                            };
+                                                            users.push(lbInfo);
+                                                            const index = currentLb.findIndex(e => e.day.toString() === now.toString());
+                                                            db.ref(`/leaderboard/${index}`)
+                                                              .update({
+                                                                day: now,
+                                                                users: [...users],
+                                                            });
+                                                     });
+                                               }
+                                               const index = currentLb.findIndex(e => e.day.toString() === now.toString());
+                                               const userIndex = users.findIndex(e => e.gameName === user.gameName);
+                                               if(updatedLevel.solved === 2) {
+                                                    lbUser.solveTime[1] = solveTime;
+                                                    db.ref(`/leaderboard/${index}/users/${userIndex}`)
+                                                      .update({
+                                                          ...lbUser,
+                                                          solved:2,
+                                                      });
+                                                    return res.json({
+                                                        data:'GAME_OVER'
+                                                    });
+                                                } else {
+                                                    const newLevelRef = db.ref("/levels/2");
+                                                    db.ref(`/leaderboard/${index}/users/${userIndex}`)
+                                                      .update({
+                                                          ...lbUser,
+                                                          solved:1,
+                                                          solveTime: [solveTime,0]
+                                                      });
+                                                    newLevelRef.once("value")
+                                                               .then(snap => {
+                                                                    return res.json({
+                                                                    message: 'CORRECT',
+                                                                    data: snap.val().data
+                                                                });
+                                                            })
+                                                            .catch(error => {
+                                                                console.log(error.code);
+                                                            });
+                                                    }
+                                            })
+                                            .catch(error => {
+                                                console.log(error.code);
+                                            });
                                     } else {
                                         return res.json({
                                             message: 'WRONG'
                                         });
                                     }
                                 }
+                            })
+                            .catch(error => {
+                                console.log(error.code);
                             });
                 }
 
+            })
+            .catch(error => {
+                console.log(error.code);
             });
 });
 
