@@ -5,6 +5,7 @@ import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
 import axios from "axios";
+
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -86,13 +87,27 @@ const game = () => {
           body,
           config
         );
-
+        console.log(res);
         if (res.data.message === "CORRECT") {
-          setState({
-            ...gstate,
-            loading: false,
-            message: "CORRECT"
-          });
+          if (res.data.data === "GAME_OVER") {
+            setState({
+              ...gstate,
+              loading: false,
+              answer: "",
+              message: "CORRECT",
+              level: {
+                message: "GAME_OVER"
+              }
+            });
+          } else {
+            setState({
+              ...gstate,
+              loading: false,
+              answer: "",
+              message: "CORRECT",
+              level: res.data
+            });
+          }
         } else {
           setState({
             ...gstate,
