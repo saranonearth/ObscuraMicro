@@ -19,7 +19,6 @@ const game = () => {
     if (!state.isAuth) {
       router.push("/");
     }
-
     const getLevel = async () => {
       try {
         const res = await axios.get(
@@ -37,8 +36,9 @@ const game = () => {
       }
     };
 
+    console.log("CALLING GET FUNCTION");
     getLevel();
-  }, [state]);
+  }, []);
 
   const handleChange = e => {
     console.log(gstate);
@@ -93,7 +93,6 @@ const game = () => {
             setState({
               ...gstate,
               loading: false,
-              answer: "",
               message: "CORRECT",
               level: {
                 message: "GAME_OVER"
@@ -103,7 +102,6 @@ const game = () => {
             setState({
               ...gstate,
               loading: false,
-              answer: "",
               message: "CORRECT",
               level: res.data
             });
@@ -115,7 +113,9 @@ const game = () => {
             message: "WRONG"
           });
         }
-
+        setTimeout(() => {
+          location.reload();
+        }, 2500);
         setTimeout(() => {
           setState({
             ...gstate,
@@ -199,9 +199,7 @@ const game = () => {
             ) : (
               <>
                 <p className="c-1">{gstate.level && gstate.level.data.name}</p>
-                {gstate.message ? (
-                  <p className="alert">{gstate.message}</p>
-                ) : null}
+
                 <p className="mt">
                   <Countdown
                     date={
@@ -236,6 +234,7 @@ const game = () => {
               </>
             )}
           </div>{" "}
+          {gstate.message ? <p className="alert">{gstate.message}</p> : null}
           <br />
           <br />
           <br />
