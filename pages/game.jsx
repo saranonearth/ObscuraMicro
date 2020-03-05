@@ -5,7 +5,8 @@ import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
 import axios from "axios";
-
+import { format } from "date-fns";
+import { firebase } from "../lib/firebase";
 const game = () => {
   const { state, dispatch } = useContext(Store);
   const router = useRouter();
@@ -13,12 +14,16 @@ const game = () => {
     answer: "",
     message: "",
     loading: false,
-    level: null
+    level: null,
+    leaderboard: [],
+    ploading: true
   });
   useEffect(() => {
     if (!state.isAuth) {
       router.push("/");
     }
+    let Level;
+    let Leaderboard;
     const getLevel = async () => {
       try {
         const res = await axios.get(
@@ -27,10 +32,35 @@ const game = () => {
 
         console.log("RESP", res);
 
-        setState({
-          ...gstate,
-          level: res.data
-        });
+        Level = res.data
+
+        const day = format(new Date(), "iiii");
+        firebase
+          .database()
+          .ref(`/leaderboard/${day}`)
+          .once("value")
+          .then(data => {
+            console.log("LEADERBOARD", data.val());
+            const obj = data.val()
+            const result = Object.keys(obj).map((item, index) => {
+              return obj[item]
+            })
+            const sorted = result.sort((a, b) => {
+              if (a.solved > b.solved) return -1;
+              if (a.solved < b.solved) return 1;
+              if (a.time > b.time) return 1;
+              if (a.time < b.time) return -1;
+            })
+            setState({
+              ...gstate,
+              leaderboard: sorted,
+              level: Level,
+              ploading: false
+            })
+          })
+          .catch(res => {
+            console.log(res);
+          });
       } catch (error) {
         console.log(error);
       }
@@ -38,6 +68,7 @@ const game = () => {
 
     console.log("CALLING GET FUNCTION");
     getLevel();
+
   }, []);
 
   const handleChange = e => {
@@ -87,8 +118,11 @@ const game = () => {
           body,
           config
         );
-        console.log(res);
+        console.log("LEVEL ANSWER", res);
         if (res.data.message === "CORRECT") {
+          setTimeout(() => {
+            location.reload();
+          }, 2500);
           if (res.data.data === "GAME_OVER") {
             setState({
               ...gstate,
@@ -106,16 +140,22 @@ const game = () => {
               level: res.data
             });
           }
-        } else {
+        }
+        if (res.data.message === "LATE") {
+          setState({
+            ...gstate,
+            loading: false,
+            message: "LATE"
+          });
+        }
+        if (res.data.message === "WRONG") {
           setState({
             ...gstate,
             loading: false,
             message: "WRONG"
           });
         }
-        setTimeout(() => {
-          location.reload();
-        }, 2500);
+
         setTimeout(() => {
           setState({
             ...gstate,
@@ -191,48 +231,48 @@ const game = () => {
       <div className="container">
         <div className="con-1">
           <div className="leaderboard wd game-img">
-            {gstate.level && gstate.level.message === "GAME_OVER" ? (
+            {gstate.ploading ? <p>Loading...</p> : gstate.level && gstate.level.message === "GAME_OVER" ? (
               <>
                 {" "}
                 <p>Game Over</p> <p>See you tomorrow</p>
               </>
             ) : (
-              <>
-                <p className="c-1">{gstate.level && gstate.level.data.name}</p>
+                <>
+                  <p className="c-1">{gstate.level && gstate.level.data.name}</p>
 
-                <p className="mt">
-                  <Countdown
-                    date={
-                      new Date(`${gstate.level && gstate.level.data.endTime}`)
-                    }
-                    renderer={renderer}
-                  />
-                </p>
-                <img
-                  src={gstate.level && gstate.level.data.data}
-                  className="game-img"
-                  alt="game-image"
-                />
-                <br />
-                <div>
-                  <form onSubmit={handleSubmit}>
-                    <input
-                      type="text"
-                      onChange={handleChange}
-                      value={gstate.answer}
-                      name="answer"
+                  <p className="mt">
+                    <Countdown
+                      date={
+                        new Date(`${gstate.level && gstate.level.data.endTime}`)
+                      }
+                      renderer={renderer}
                     />
-                    <div>
-                      {gstate.loading ? (
-                        <p className="mt-1">Checking..</p>
-                      ) : (
-                        <button className="btn">Submit</button>
-                      )}
-                    </div>
-                  </form>
-                </div>
-              </>
-            )}
+                  </p>
+                  <img
+                    src={gstate.level && gstate.level.data.data}
+                    className="game-img"
+                    alt="game-image"
+                  />
+                  <br />
+                  <div>
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        type="text"
+                        onChange={handleChange}
+                        value={gstate.answer}
+                        name="answer"
+                      />
+                      <div>
+                        {gstate.loading ? (
+                          <p className="mt-1">Checking..</p>
+                        ) : (
+                            <button className="btn">Submit</button>
+                          )}
+                      </div>
+                    </form>
+                  </div>
+                </>
+              )}
           </div>{" "}
           {gstate.message ? <p className="alert">{gstate.message}</p> : null}
           <br />
@@ -244,23 +284,34 @@ const game = () => {
               <div> Rank </div> <div> Player </div>{" "}
               <div className="mt-l"> Solved </div> <div> Time(mins) </div>{" "}
             </div>{" "}
-            <div className="tr">
-              <div className="lb-player rk ">
-                <div> 1 </div>{" "}
-              </div>{" "}
-              <div className="lb-player pl">
-                <div>
-                  <img
-                    className="lb-img"
-                    src="https://via.placeholder.com/150"
-                    alt="userimg"
-                  />
-                </div>{" "}
-                <div className="pl-n"> Saran </div>{" "}
-              </div>{" "}
-              <div className="lb-player"> 1 / 2 </div>{" "}
-              <div className="lb-player"> 23 </div>{" "}
-            </div>{" "}
+            {
+              !gstate.ploading ? gstate.leaderboard.length > 0 ? gstate.leaderboard.map((p, index) => {
+                return <div key={index} className="tr">
+                  <div className="lb-player rk ">
+                    <div> {index + 1}</div>{" "}
+                  </div>{" "}
+                  <div className="lb-player pl">
+                    <div>
+                      <img
+                        className="lb-img"
+                        src={p.image}
+                        alt={p.gameName}
+                      />
+                    </div>{" "}
+                    <div className="pl-n"> {p.gameName} </div>{" "}
+                  </div>{" "}
+                  <div className="lb-player"> {p.solved}/ 2 </div>{" "}
+                  <div className="lb-player"> {p.time}</div>{" "}
+                </div>
+
+              }) : <div>
+                  <br />
+                  <center><p>No entries yet</p></center>
+                </div> : <div>
+                  <br />
+                  <center><p>Loading..</p></center>
+                </div>
+            }
           </div>{" "}
           <br />
           <br />
