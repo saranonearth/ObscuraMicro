@@ -14,6 +14,7 @@ const index = () => {
     previous: []
   })
   useEffect(() => {
+    let isCancelled = false
     dispatch({
       type: "LOADING_BEGIN"
     });
@@ -54,17 +55,23 @@ const index = () => {
 
         firebase.database().ref('/previousday/').once("value").then(data => {
 
-          setState({
-            ...gstate,
-            leaderboard: Leaderboard,
-            loading: false,
-            previous: data.val()
-          })
+          if (!isCancelled) {
+            setState({
+              ...gstate,
+              leaderboard: Leaderboard,
+              loading: false,
+              previous: (data.val() === null) ? [] : data.val()
+            })
+          }
         })
       })
       .catch(res => {
         console.log(res);
       });
+
+    return () => {
+      isCancelled = true;
+    };
   }, []);
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -173,6 +180,9 @@ const index = () => {
                           className="lb-img"
                           src={p.image}
                           alt={p.gameName}
+                          onError={(e) => {
+                            e.target.src = "https://via.placeholder.com/150"
+                          }}
                         />
                       </div>{" "}
                       <div className="pl-n"> {p.name} </div>{" "}
@@ -205,6 +215,9 @@ const index = () => {
                         className="lb-img"
                         src={d.image}
                         alt="userimg"
+                        onError={(e) => {
+                          e.target.src = "https://via.placeholder.com/150"
+                        }}
                       />
                     </div>
                     <div>{d.name}</div>

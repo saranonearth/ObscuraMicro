@@ -30,7 +30,7 @@ const game = () => {
       const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
       try {
         const res = await axios.get(
-          purl
+          url
         );
 
         console.log("RESP", res);
@@ -69,7 +69,7 @@ const game = () => {
                 leaderboard: Leaderboard,
                 level: Level,
                 ploading: false,
-                previous: data.val()
+                previous: (data.val() === null) ? [] : data.val()
               })
             })
           })
@@ -129,10 +129,11 @@ const game = () => {
           loading: true
         });
 
-        const url = "https://obscura-microserver.herokuapp.com/check"
-        const purl = "http://localhost:5000/check"
+        const levelName = gstate.level.data.name
+        const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`
+        const purl = `http://localhost:5000/check/${levelName}`
         const res = await axios.post(
-          purl,
+          url,
           body,
           config
         );
@@ -242,6 +243,9 @@ const game = () => {
               src={state.user && state.user.image}
               className="profile-image"
               alt="img"
+              onError={(e) => {
+                e.target.src = "https://via.placeholder.com/150"
+              }}
             />
           </div>
           <div className="center-v">
@@ -273,6 +277,9 @@ const game = () => {
                 src={gstate.level && gstate.level.data.data}
                 className="game-img"
                 alt="game-image"
+                onError={(e) => {
+                  e.target.src = "https://via.placeholder.com/150"
+                }}
               />
               <br />
               <div>
@@ -316,6 +323,9 @@ const game = () => {
                         className="lb-img"
                         src={p.image}
                         alt={p.gameName}
+                        onError={(e) => {
+                          e.target.src = "https://via.placeholder.com/150"
+                        }}
                       />
                     </div>{" "}
                     <div className="pl-n"> {p.name} </div>{" "}
@@ -356,6 +366,9 @@ const game = () => {
                       className="lb-img"
                       src={d.image}
                       alt="userimg"
+                      onError={(e) => {
+                        e.target.src = "https://via.placeholder.com/150"
+                      }}
                     />
                   </div>
                   <div>{d.name}</div>
