@@ -5,7 +5,7 @@ import { auth } from "../lib/firebase.js";
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
 import axios from "axios";
-import { format } from "date-fns";
+import { format, compareAsc } from "date-fns";
 import { firebase } from "../lib/firebase";
 const game = () => {
   const { state, dispatch } = useContext(Store);
@@ -16,7 +16,8 @@ const game = () => {
     loading: false,
     level: null,
     leaderboard: [],
-    ploading: true
+    ploading: true,
+    previous: []
   });
   useEffect(() => {
     if (!state.isAuth) {
@@ -25,9 +26,11 @@ const game = () => {
     let Level;
     let Leaderboard;
     const getLevel = async () => {
+      const url = `https://obscura-microserver.herokuapp.com/getlevel/${state.user && state.user.id}`
+      const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
       try {
         const res = await axios.get(
-          `http://localhost:5050/getlevel/${state.user && state.user.id}`
+          purl
         );
 
         console.log("RESP", res);
@@ -35,27 +38,39 @@ const game = () => {
         Level = res.data
 
         const day = format(new Date(), "iiii");
+        console.log("DAY", day)
         firebase
           .database()
           .ref(`/leaderboard/${day}`)
           .once("value")
           .then(data => {
+            console.log(data.val())
             console.log("LEADERBOARD", data.val());
-            const obj = data.val()
-            const result = Object.keys(obj).map((item, index) => {
-              return obj[item]
-            })
-            const sorted = result.sort((a, b) => {
-              if (a.solved > b.solved) return -1;
-              if (a.solved < b.solved) return 1;
-              if (a.time > b.time) return 1;
-              if (a.time < b.time) return -1;
-            })
-            setState({
-              ...gstate,
-              leaderboard: sorted,
-              level: Level,
-              ploading: false
+            if (data.val()) {
+              const obj = data.val()
+              const result = Object.keys(obj).map((item, index) => {
+                return obj[item]
+              })
+              const sorted = result.sort((a, b) => {
+                if (a.solved > b.solved) return -1;
+                if (a.solved < b.solved) return 1;
+                if (a.time > b.time) return 1;
+                if (a.time < b.time) return -1;
+              })
+              Leaderboard = sorted
+            } else {
+              Leaderboard = []
+            }
+
+            firebase.database().ref('/previousday/').once("value").then(data => {
+
+              setState({
+                ...gstate,
+                leaderboard: Leaderboard,
+                level: Level,
+                ploading: false,
+                previous: data.val()
+              })
             })
           })
           .catch(res => {
@@ -113,8 +128,11 @@ const game = () => {
           ...gstate,
           loading: true
         });
+
+        const url = "https://obscura-microserver.herokuapp.com/check"
+        const purl = "http://localhost:5000/check"
         const res = await axios.post(
-          "http://localhost:5050/check",
+          purl,
           body,
           config
         );
@@ -194,6 +212,10 @@ const game = () => {
   };
 
   const Completionist = () => <span>Time up</span>;
+  const isStart = () => {
+    return compareAsc(new Date(), new Date(gstate.level.data.startTime))
+  }
+
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -233,47 +255,45 @@ const game = () => {
           <div className="leaderboard wd game-img">
             {gstate.ploading ? <p>Loading...</p> : gstate.level && gstate.level.message === "GAME_OVER" ? (
               <>
-                {" "}
+
                 <p>Game Over</p> <p>See you tomorrow</p>
               </>
-            ) : (
-                <>
-                  <p className="c-1">{gstate.level && gstate.level.data.name}</p>
+            ) : isStart() === 1 ? <>
+              <p className="c-1">{gstate.level && gstate.level.data.name}</p>
 
-                  <p className="mt">
-                    <Countdown
-                      date={
-                        new Date(`${gstate.level && gstate.level.data.endTime}`)
-                      }
-                      renderer={renderer}
-                    />
-                  </p>
-                  <img
-                    src={gstate.level && gstate.level.data.data}
-                    className="game-img"
-                    alt="game-image"
+              <p className="mt">
+                <Countdown
+                  date={
+                    new Date(`${gstate.level && gstate.level.data.endTime}`)
+                  }
+                  renderer={renderer}
+                />
+              </p>
+              <img
+                src={gstate.level && gstate.level.data.data}
+                className="game-img"
+                alt="game-image"
+              />
+              <br />
+              <div>
+                <form onSubmit={handleSubmit}>
+                  <input
+                    type="text"
+                    onChange={handleChange}
+                    value={gstate.answer}
+                    name="answer"
                   />
-                  <br />
                   <div>
-                    <form onSubmit={handleSubmit}>
-                      <input
-                        type="text"
-                        onChange={handleChange}
-                        value={gstate.answer}
-                        name="answer"
-                      />
-                      <div>
-                        {gstate.loading ? (
-                          <p className="mt-1">Checking..</p>
-                        ) : (
-                            <button className="btn">Submit</button>
-                          )}
-                      </div>
-                    </form>
+                    {gstate.loading ? (
+                      <p className="mt-1">Checking..</p>
+                    ) : (
+                        <button className="btn">Submit</button>
+                      )}
                   </div>
-                </>
-              )}
-          </div>{" "}
+                </form>
+              </div>
+            </> : <p>Level will start soon at {format(new Date(gstate.level.data.startTime), "HH:mm,	aaaa")}</p>}
+          </div>
           {gstate.message ? <p className="alert">{gstate.message}</p> : null}
           <br />
           <br />
@@ -298,7 +318,7 @@ const game = () => {
                         alt={p.gameName}
                       />
                     </div>{" "}
-                    <div className="pl-n"> {p.gameName} </div>{" "}
+                    <div className="pl-n"> {p.name} </div>{" "}
                   </div>{" "}
                   <div className="lb-player"> {p.solved}/ 2 </div>{" "}
                   <div className="lb-player"> {p.time}</div>{" "}
@@ -327,25 +347,27 @@ const game = () => {
           <div className="daily">
             <div className="tr th">
               <div> Player </div> <div> Day </div>{" "}
-            </div>{" "}
-            <div className="tr">
-              <div className="lb-player">
-                <div>
-                  <img
-                    className="lb-img"
-                    src="https://via.placeholder.com/150"
-                    alt="userimg"
-                  />
-                </div>{" "}
-                <div> Saran </div>{" "}
-              </div>{" "}
-              <div className="center">
-                <div> Monday </div>{" "}
-              </div>{" "}
-            </div>{" "}
-          </div>{" "}
-        </div>{" "}
-      </div>{" "}
+            </div>
+            {
+              gstate.ploading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
+                <div className="lb-player">
+                  <div>
+                    <img
+                      className="lb-img"
+                      src={d.image}
+                      alt="userimg"
+                    />
+                  </div>
+                  <div>{d.name}</div>
+                </div>
+                <div className="center">
+                  <div>{d.day}</div>
+                </div>
+              </div>)
+            }
+          </div>
+        </div>
+      </div>
       <div className="footer">
         <div> developed by gawds </div>{" "}
       </div>

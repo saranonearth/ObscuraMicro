@@ -1,13 +1,18 @@
 import Router from "next/router";
 import { firebase } from "../lib/firebase";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
 import Loading from "./loading";
 import Navbar from "../components/Navbar";
-import Leaderboard from "../components/Leaderboard";
+import { format, compareAsc } from "date-fns";
 import Daily from "../components/Daily";
 const index = () => {
   const { state, dispatch } = useContext(Store);
+  const [gstate, setState] = useState({
+    leaderboard: [],
+    loading: true,
+    previous: []
+  })
   useEffect(() => {
     dispatch({
       type: "LOADING_BEGIN"
@@ -22,6 +27,44 @@ const index = () => {
         });
       }
     });
+    const day = format(new Date(), "iiii");
+    let Leaderboard;
+    firebase
+      .database()
+      .ref(`/leaderboard/${day}`)
+      .once("value")
+      .then(data => {
+        console.log(data.val())
+        console.log("LEADERBOARD", data.val());
+        if (data.val()) {
+          const obj = data.val()
+          const result = Object.keys(obj).map((item, index) => {
+            return obj[item]
+          })
+          const sorted = result.sort((a, b) => {
+            if (a.solved > b.solved) return -1;
+            if (a.solved < b.solved) return 1;
+            if (a.time > b.time) return 1;
+            if (a.time < b.time) return -1;
+          })
+          Leaderboard = sorted
+        } else {
+          Leaderboard = []
+        }
+
+        firebase.database().ref('/previousday/').once("value").then(data => {
+
+          setState({
+            ...gstate,
+            leaderboard: Leaderboard,
+            loading: false,
+            previous: data.val()
+          })
+        })
+      })
+      .catch(res => {
+        console.log(res);
+      });
   }, []);
   const loginHandler = () => {
     const provider = new firebase.auth.GoogleAuthProvider();
@@ -115,31 +158,64 @@ const index = () => {
           <div className="con-1">
             <div className="leaderboard">
               <div className="th tr">
-                <div>Rank</div>
-                <div>Player</div>
-                <div className="mt-l">Solved</div>
-                <div>Time(mins)</div>
-              </div>
-              <div className="tr">
-                <div className="lb-player rk ">
-                  <div>1</div>
-                </div>
-                <div className="lb-player pl">
-                  <div>
-                    <img
-                      className="lb-img"
-                      src="https://via.placeholder.com/150"
-                      alt="userimg"
-                    />
+                <div> Rank </div> <div> Player </div>{" "}
+                <div className="mt-l"> Solved </div> <div> Time(mins) </div>{" "}
+              </div>{" "}
+              {
+                !gstate.loading ? gstate.leaderboard.length > 0 ? gstate.leaderboard.map((p, index) => {
+                  return <div key={index} className="tr">
+                    <div className="lb-player rk ">
+                      <div> {index + 1}</div>{" "}
+                    </div>{" "}
+                    <div className="lb-player pl">
+                      <div>
+                        <img
+                          className="lb-img"
+                          src={p.image}
+                          alt={p.gameName}
+                        />
+                      </div>{" "}
+                      <div className="pl-n"> {p.name} </div>{" "}
+                    </div>{" "}
+                    <div className="lb-player"> {p.solved}/ 2 </div>{" "}
+                    <div className="lb-player"> {p.time}</div>{" "}
                   </div>
-                  <div className="pl-n">Saran</div>
-                </div>
-                <div className="lb-player">1/2</div>
-                <div className="lb-player">23</div>
-              </div>
+
+                }) : <div>
+                    <br />
+                    <center><p>No entries yet</p></center>
+                  </div> : <div>
+                    <br />
+                    <center><p>Loading..</p></center>
+                  </div>
+              }
             </div>
           </div>
-          <Daily />
+          <div className="con-2">
+            <p className="sub-title"> Previous days winners </p>{" "}
+            <div className="daily">
+              <div className="tr th">
+                <div> Player </div> <div> Day </div>{" "}
+              </div>
+              {
+                gstate.loading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
+                  <div className="lb-player">
+                    <div>
+                      <img
+                        className="lb-img"
+                        src={d.image}
+                        alt="userimg"
+                      />
+                    </div>
+                    <div>{d.name}</div>
+                  </div>
+                  <div className="center">
+                    <div>{d.day}</div>
+                  </div>
+                </div>)
+              }
+            </div>
+          </div>
         </div>
         <div className="footer">
           <div>developed by gawds</div>
