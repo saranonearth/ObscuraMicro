@@ -290,7 +290,25 @@ button {
   margin-top: 10px;
   text-align: center;
 }
-
+.item-card{
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  align-items: center;
+  margin-top: 50px;
+  box-shadow:0 12px 10px -10px rgba(0,0,0,0.3);
+  border-radius: 6px;
+}
+.item-card:hover{
+  background-color: rgb(31, 31, 31);
+  cursor: pointer;
+}
+.pl{
+  text-align: left;
+  justify-content: flex-start;
+}
 @media (max-width: 800px) {
   .con-2 {
     margin-bottom: 100px;

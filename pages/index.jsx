@@ -2,6 +2,7 @@ import Router from "next/router";
 import { firebase } from "../lib/firebase";
 import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
+import Link from 'next/link'
 import Loading from "./loading";
 import Navbar from "../components/Navbar";
 import { format, compareAsc } from "date-fns";
@@ -228,6 +229,12 @@ const index = () => {
                 </div>)
               }
             </div>
+            <Link href="/teamobscura">
+              <div className="item-card">
+                <div><p>Team ObscurA</p></div>
+              </div>
+            </Link>
+
           </div>
         </div>
         <div className="footer">
