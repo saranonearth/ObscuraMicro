@@ -33,7 +33,7 @@ const index = () => {
     let Leaderboard;
     firebase
       .database()
-      .ref(`/leaderboard/${day}`)
+      .ref(`/users`)
       .once("value")
       .then(data => {
         console.log(data.val())
@@ -44,17 +44,17 @@ const index = () => {
             return obj[item]
           })
           const sorted = result.sort((a, b) => {
-            if (a.solved > b.solved) return -1;
-            if (a.solved < b.solved) return 1;
+            if (a.levelsSolved > b.levelsSolved) return -1;
+            if (a.levelsSolved < b.levelsSolved) return 1;
             if (a.time > b.time) return 1;
             if (a.time < b.time) return -1;
           })
-          Leaderboard = sorted
+          Leaderboard = sorted.slice(0, 11)
         } else {
           Leaderboard = []
         }
 
-        firebase.database().ref('/previousday/').once("value").then(data => {
+        firebase.database().ref('/notifications/').once("value").then(data => {
 
           if (!isCancelled) {
             setState({
@@ -159,7 +159,7 @@ const index = () => {
         <Navbar state={state} loginHandler={loginHandler} />
         <div className="banner">
           <div className="text">
-            Play ObscurA Micro to win goodies and clue keys for the main game!
+            ObscurA Quarantine Special :p
           </div>
         </div>
         <div className="container">
@@ -181,14 +181,12 @@ const index = () => {
                           className="lb-img"
                           src={p.image}
                           alt={p.gameName}
-                          onError={(e) => {
-                            e.target.src = "https://via.placeholder.com/150"
-                          }}
+
                         />
                       </div>{" "}
-                      <div className="pl-n"> {p.name} </div>{" "}
+                      <div className="pl-n"> {p.gameName} </div>{" "}
                     </div>{" "}
-                    <div className="lb-player"> {p.solved}/ 2 </div>{" "}
+                    <div className="lb-player"> {p.levelsSolved}</div>{" "}
                     <div className="lb-player"> {p.time}</div>{" "}
                   </div>
 
@@ -203,37 +201,23 @@ const index = () => {
             </div>
           </div>
           <div className="con-2">
-            <p className="sub-title"> Previous days winners </p>{" "}
-            <div className="daily">
-              <div className="tr th">
-                <div> Player </div> <div> Day </div>{" "}
-              </div>
-              {
-                gstate.loading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
-                  <div className="lb-player">
-                    <div>
-                      <img
-                        className="lb-img"
-                        src={d.image}
-                        alt="userimg"
-                        onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/150"
-                        }}
-                      />
-                    </div>
-                    <div>{d.name}</div>
-                  </div>
-                  <div className="center">
-                    <div>{d.day}</div>
-                  </div>
-                </div>)
-              }
-            </div>
             <Link href="/teamobscura">
               <div className="item-card">
                 <div><p>Team ObscurA</p></div>
               </div>
             </Link>
+            <p className="sub-title"> Notifications </p>{" "}
+            <div className="daily">
+              {
+                gstate.loading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
+                  <div>
+                    {d}
+                  </div>
+
+                </div>)
+              }
+            </div>
+
 
           </div>
         </div>

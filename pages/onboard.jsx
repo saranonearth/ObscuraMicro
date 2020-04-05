@@ -36,12 +36,7 @@ const onboard = () => {
         gameName,
         bio,
         image: state.user.image,
-        levelsSolved: [
-          {
-            day: now,
-            solved: 0
-          }
-        ]
+        levelsSolved: 0
       })
       .then(() => {
         dispatch({

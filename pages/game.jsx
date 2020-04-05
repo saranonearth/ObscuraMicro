@@ -2,6 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
+import Link from 'next/link'
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
 import axios from "axios";
@@ -30,18 +31,19 @@ const game = () => {
       const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
       try {
         const res = await axios.get(
-          url
+          purl
         );
 
         console.log("RESP", res);
 
         Level = res.data
 
+
         const day = format(new Date(), "iiii");
         console.log("DAY", day)
         firebase
           .database()
-          .ref(`/leaderboard/${day}`)
+          .ref(`/users`)
           .once("value")
           .then(data => {
             console.log(data.val())
@@ -52,17 +54,17 @@ const game = () => {
                 return obj[item]
               })
               const sorted = result.sort((a, b) => {
-                if (a.solved > b.solved) return -1;
-                if (a.solved < b.solved) return 1;
+                if (a.levelsSolved > b.levelsSolved) return -1;
+                if (a.levelsSolved < b.levelsSolved) return 1;
                 if (a.time > b.time) return 1;
                 if (a.time < b.time) return -1;
               })
-              Leaderboard = sorted
+              Leaderboard = sorted.slice(0, 11)
             } else {
               Leaderboard = []
             }
 
-            firebase.database().ref('/previousday/').once("value").then(data => {
+            firebase.database().ref('/notifications/').once("value").then(data => {
 
               setState({
                 ...gstate,
@@ -133,7 +135,7 @@ const game = () => {
         const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`
         const purl = `http://localhost:5000/check/${levelName}`
         const res = await axios.post(
-          url,
+          purl,
           body,
           config
         );
@@ -142,13 +144,13 @@ const game = () => {
           setTimeout(() => {
             location.reload();
           }, 2500);
-          if (res.data.data === "GAME_OVER") {
+          if (res.data.data === "NO_MORE_LEVELS") {
             setState({
               ...gstate,
               loading: false,
               message: "CORRECT",
               level: {
-                message: "GAME_OVER"
+                message: "NO_MORE_LEVELS"
               }
             });
           } else {
@@ -213,9 +215,9 @@ const game = () => {
   };
 
   const Completionist = () => <span>Time up</span>;
-  const isStart = () => {
-    return compareAsc(new Date(), new Date(gstate.level.data.startTime))
-  }
+  // const isStart = () => {
+  //   return compareAsc(new Date(), new Date(gstate.level.data.startTime))
+  // }
 
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
@@ -243,9 +245,6 @@ const game = () => {
               src={state.user && state.user.image}
               className="profile-image"
               alt="img"
-              onError={(e) => {
-                e.target.src = "https://via.placeholder.com/150"
-              }}
             />
           </div>
           <div className="center-v">
@@ -257,49 +256,51 @@ const game = () => {
       <div className="container">
         <div className="con-1">
           <div className="leaderboard wd game-img">
-            {gstate.ploading ? <p>Loading...</p> : gstate.level && gstate.level.message === "GAME_OVER" ? (
+            {gstate.ploading ? <p>Loading...</p> : gstate.level && gstate.level.message === "NO_MORE_LEVELS" ? (
               <>
 
                 <p>Game Over</p> <p>See you tomorrow</p>
               </>
-            ) : isStart() === 1 ? <>
-              <p className="c-1">{gstate.level && gstate.level.data.name}</p>
+            ) : gstate.level.message === "WAIT" ? <>
+              <p>Next Level will be available soon</p>
+            </> : <>
+                  <p className="c-1">{gstate.level && gstate.level.data.name}</p>
 
-              <p className="mt">
+                  {/* <p className="mt">
                 <Countdown
                   date={
                     new Date(`${gstate.level && gstate.level.data.endTime}`)
                   }
                   renderer={renderer}
                 />
-              </p>
-              <img
-                src={gstate.level && gstate.level.data.data}
-                className="game-img"
-                alt="game-image"
-                onError={(e) => {
-                  e.target.src = "https://via.placeholder.com/150"
-                }}
-              />
-              <br />
-              <div>
-                <form onSubmit={handleSubmit}>
-                  <input
-                    type="text"
-                    onChange={handleChange}
-                    value={gstate.answer}
-                    name="answer"
+              </p> */}
+                  <img
+                    src={gstate.level && gstate.level.data.data}
+                    className="game-img"
+                    alt="game-image"
+                    onError={(e) => {
+                      e.target.src = "https://via.placeholder.com/150"
+                    }}
                   />
+                  <br />
                   <div>
-                    {gstate.loading ? (
-                      <p className="mt-1">Checking..</p>
-                    ) : (
-                        <button className="btn">Submit</button>
-                      )}
+                    <form onSubmit={handleSubmit}>
+                      <input
+                        type="text"
+                        onChange={handleChange}
+                        value={gstate.answer}
+                        name="answer"
+                      />
+                      <div>
+                        {gstate.loading ? (
+                          <p className="mt-1">Checking..</p>
+                        ) : (
+                            <button className="btn">Submit</button>
+                          )}
+                      </div>
+                    </form>
                   </div>
-                </form>
-              </div>
-            </> : <p>Level will start soon at {format(new Date(gstate.level.data.startTime), "HH:mm,	aaaa")}</p>}
+                </>}
           </div>
           {gstate.message ? <p className="alert">{gstate.message}</p> : null}
           <br />
@@ -330,7 +331,7 @@ const game = () => {
                     </div>{" "}
                     <div className="pl-n"> {p.name} </div>{" "}
                   </div>{" "}
-                  <div className="lb-player"> {p.solved}/ 2 </div>{" "}
+                  <div className="lb-player"> {p.levelsSolved}</div>{" "}
                   <div className="lb-player"> {p.time}</div>{" "}
                 </div>
 
@@ -353,29 +354,20 @@ const game = () => {
           <br />
         </div>{" "}
         <div className="con-2">
-          <p className="sub-title"> Previous days winners </p>{" "}
-          <div className="daily">
-            <div className="tr th">
-              <div> Player </div> <div> Day </div>{" "}
+          <Link href="/teamobscura">
+            <div className="item-card">
+              <div><p>Team ObscurA</p></div>
             </div>
+          </Link>
+          <p className="sub-title"> Notifications </p>{" "}
+          <div className="daily">
+
             {
               gstate.ploading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
-                <div className="lb-player">
-                  <div>
-                    <img
-                      className="lb-img"
-                      src={d.image}
-                      alt="userimg"
-                      onError={(e) => {
-                        e.target.src = "https://via.placeholder.com/150"
-                      }}
-                    />
-                  </div>
-                  <div>{d.name}</div>
+                <div>
+                  {d}
                 </div>
-                <div className="center">
-                  <div>{d.day}</div>
-                </div>
+
               </div>)
             }
           </div>
