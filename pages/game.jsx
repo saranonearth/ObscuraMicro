@@ -19,6 +19,8 @@ const game = () => {
     leaderboard: [],
     ploading: true,
     previous: [],
+    page: 0,
+    Leaderboard: [],
   });
   useEffect(() => {
     if (!state.isAuth) {
@@ -61,7 +63,7 @@ const game = () => {
                 if (a.time > b.time) return 1;
                 if (a.time < b.time) return -1;
               });
-              Leaderboard = sorted.slice(0, 11);
+              Leaderboard = sorted;
             } else {
               Leaderboard = [];
             }
@@ -74,6 +76,7 @@ const game = () => {
                 setState({
                   ...gstate,
                   leaderboard: Leaderboard,
+                  Leaderboard: Leaderboard.slice(0, 10),
                   level: Level,
                   ploading: false,
                   previous: data.val() === null ? [] : data.val(),
@@ -242,6 +245,23 @@ const game = () => {
       );
     }
   };
+  const handleLoad = () => {
+    setState({
+      ...gstate,
+      Leaderboard: gstate.Leaderboard.concat(
+        gstate.leaderboard.slice(gstate.page + 1 * 10, (gstate.page + 2) * 10)
+      ),
+      page: gstate.page + 1,
+    });
+  };
+  const handleLoadless = () => {
+    setState({
+      ...gstate,
+      Leaderboard: gstate.leaderboard.slice(0, 10),
+      page: 0,
+    });
+    window.scrollTo(0, 0);
+  };
   console.log("GSTATE", gstate);
   return (
     <div>
@@ -324,8 +344,8 @@ const game = () => {
               <div className="mt-l"> Solved </div> <div> Time(mins) </div>{" "}
             </div>{" "}
             {!gstate.ploading ? (
-              gstate.leaderboard.length > 0 ? (
-                gstate.leaderboard.map((p, index) => {
+              gstate.Leaderboard.length > 0 ? (
+                gstate.Leaderboard.map((p, index) => {
                   return (
                     <div key={index} className="tr">
                       <div className="lb-player rk ">
@@ -365,7 +385,20 @@ const game = () => {
                 </center>
               </div>
             )}
-          </div>{" "}
+          </div>
+          <div>
+            <center>
+              {gstate.leaderboard.length / 10 - 1 <= gstate.page ? (
+                <button onClick={handleLoadless} className="btn">
+                  Showless
+                </button>
+              ) : (
+                <button onClick={handleLoad} className="btn">
+                  Loadmore
+                </button>
+              )}
+            </center>
+          </div>
           <div className="no-mobile">
             <br />
             <br />

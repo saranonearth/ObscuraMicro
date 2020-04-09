@@ -11,8 +11,10 @@ const index = () => {
   const { state, dispatch } = useContext(Store);
   const [gstate, setState] = useState({
     leaderboard: [],
+    Leaderboard: [],
     loading: true,
     previous: [],
+    page: 0,
   });
   useEffect(() => {
     let isCancelled = false;
@@ -49,7 +51,7 @@ const index = () => {
             if (a.time > b.time) return 1;
             if (a.time < b.time) return -1;
           });
-          Leaderboard = sorted.slice(0, 11);
+          Leaderboard = sorted;
         } else {
           Leaderboard = [];
         }
@@ -63,6 +65,7 @@ const index = () => {
               setState({
                 ...gstate,
                 leaderboard: Leaderboard,
+                Leaderboard: Leaderboard.slice(0, 10),
                 loading: false,
                 previous: data.val() === null ? [] : data.val(),
               });
@@ -153,6 +156,23 @@ const index = () => {
         console.log(error);
       });
   };
+  const handleLoadless = () => {
+    setState({
+      ...gstate,
+      Leaderboard: gstate.leaderboard.slice(0, 10),
+      page: 0,
+    });
+    window.scrollTo(0, 0);
+  };
+  const handleLoad = () => {
+    setState({
+      ...gstate,
+      Leaderboard: gstate.Leaderboard.concat(
+        gstate.leaderboard.slice(gstate.page + 1 * 10, (gstate.page + 2) * 10)
+      ),
+      page: gstate.page + 1,
+    });
+  };
   if (state.loading) {
     return <Loading />;
   } else {
@@ -175,8 +195,8 @@ const index = () => {
                 <div className="mt-l"> Solved </div> <div> Time(mins) </div>{" "}
               </div>{" "}
               {!gstate.loading ? (
-                gstate.leaderboard.length > 0 ? (
-                  gstate.leaderboard.map((p, index) => {
+                gstate.Leaderboard.length > 0 ? (
+                  gstate.Leaderboard.map((p, index) => {
                     return (
                       <div key={index} className="tr">
                         <div className="lb-player rk ">
@@ -214,6 +234,19 @@ const index = () => {
                 </div>
               )}
             </div>
+            <div>
+              <center>
+                {gstate.leaderboard.length / 10 - 1 <= gstate.page ? (
+                  <button onClick={handleLoadless} className="btn">
+                    Showless
+                  </button>
+                ) : (
+                  <button onClick={handleLoad} className="btn">
+                    Loadmore
+                  </button>
+                )}
+              </center>
+            </div>
           </div>
           <div className="con-2">
             <Link href="/teamobscura">
@@ -242,7 +275,7 @@ const index = () => {
         <div className="footer">
           <div>
             developed by{" "}
-            <a target="_blank" className="wb" href="www.gawds.in">
+            <a target="_blank" className="wb" href="http://gawds.in/">
               gawds
             </a>
           </div>
