@@ -1,14 +1,14 @@
 import App from "next/app";
 import Provider from "../components/Provider";
 import Head from "next/head";
-import './style.css';
+import "./style.css";
 class MyApp extends App {
   render() {
     const { Component, pageProps } = this.props;
     return (
       <>
         <Head>
-          <title>ObscurA Micro</title>
+          <title>ObscurA</title>
           <link
             href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900i&display=swap"
             rel="stylesheet"
