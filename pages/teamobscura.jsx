@@ -156,37 +156,9 @@ const Teamobscura = () => {
             />
             <div className="t-name">Prakhar</div>
           </div>
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnujSharma.jpg?alt=media&token=30c83ca1-5d56-4e3c-9ae0-fdaf4d251ca4"
-            />
-            <div className="t-name">Anuj Sharma</div>
-          </div>
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAryanKaul.jpg?alt=media&token=8e95897b-9dd4-4a3a-bb35-b921e42221af"
-            />
-            <div className="t-name">Aryan Kaul</div>
-          </div>
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAvinashBharti.jpg?alt=media&token=c794ebe8-a487-4ac1-9d62-1243c67a58ed"
-            />
-            <div className="t-name">Avinash</div>
-          </div>
         </div>
         <div className="c-text2">Quartermasters</div>
         <div className="tm-row">
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FKartikYadav.jpg?alt=media&token=961d8b71-bfda-4ae2-b014-9dd498a74644"
-            />
-            <div className="t-name">Kartik Yadav</div>
-          </div>
           <div className="tm-member">
             <img
               className="t-image"
@@ -279,6 +251,26 @@ const Teamobscura = () => {
         </div>
         <div className="c-text"> Developers </div>{" "}
         <div className="tm-row dev">
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnujSharma.jpg?alt=media&token=30c83ca1-5d56-4e3c-9ae0-fdaf4d251ca4"
+            />
+            <div className="t-name">Anuj Sharma</div>
+            <a className="link-t" href="https://github.com/phoenixking25">
+              github
+            </a>
+          </div>
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FKartikYadav.jpg?alt=media&token=961d8b71-bfda-4ae2-b014-9dd498a74644"
+            />
+            <div className="t-name">Kartik Yadav</div>
+            <a className="link-t" href="https://github.com/war-turtle">
+              github
+            </a>
+          </div>
           <div className="tm-member">
             <img
               className="t-image"
