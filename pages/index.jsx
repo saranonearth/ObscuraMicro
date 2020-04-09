@@ -6,7 +6,8 @@ import Link from "next/link";
 import Loading from "./loading";
 import Navbar from "../components/Navbar";
 import { format, compareAsc } from "date-fns";
-import Daily from "../components/Daily";
+import Kanvasad from "../components/Kanvasad";
+
 const index = () => {
   const { state, dispatch } = useContext(Store);
   const [gstate, setState] = useState({
@@ -249,6 +250,7 @@ const index = () => {
             </div>
           </div>
           <div className="con-2">
+            <Kanvasad />
             <Link href="/teamobscura">
               <div className="item-card">
                 <div>

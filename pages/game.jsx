@@ -4,7 +4,7 @@ import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
 import Link from "next/link";
 import Navbar from "../components/Navbar";
-import Countdown from "react-countdown";
+import Kanvasad from "../components/Kanvasad";
 import axios from "axios";
 import { format, compareAsc } from "date-fns";
 import { firebase } from "../lib/firebase";
@@ -410,6 +410,7 @@ const game = () => {
           <br />
         </div>{" "}
         <div className="con-2">
+          <Kanvasad />
           <Link href="/teamobscura">
             <div className="item-card">
               <div>
