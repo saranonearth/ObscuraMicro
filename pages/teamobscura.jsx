@@ -13,33 +13,6 @@ const Teamobscura = () => {
         <div className="text">Team ObscurA</div>
       </div>
       <div className="tm-container">
-        <div className="c-text"> Developers </div>{" "}
-        <div className="tm-row">
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2Fsaran.jpg?alt=media&token=55015d16-40d6-4811-8fde-d5bcdb5e663b"
-            />
-            <div className="t-name"> Saran </div>{" "}
-            <div>
-              <a className="link-t" href="https://github.com/saranonearth">
-                github
-              </a>
-            </div>
-          </div>{" "}
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FHardik.jpg?alt=media&token=ddd387fd-3771-45e7-a0ca-c404e65d98be"
-            />
-            <div className="t-name"> Hardik </div>{" "}
-            <div>
-              <a className="link-t" href="https://github.com/fusionmaster7">
-                github
-              </a>
-            </div>
-          </div>{" "}
-        </div>
         <div className="c-text">Architects</div>
         <div className="c-text2">Elders</div>
         <div className="tm-row">
