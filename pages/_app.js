@@ -9,10 +9,14 @@ class MyApp extends App {
       <>
         <Head>
           <title>ObscurA</title>
+          <meta name="description" content="Here is a precise description of my awesome webpage.">
+          <meta name="keywords" content="obscura,nit kkr,crypt hunt">
+          <meta name="author" content="saranonearth | fusionmaster7">
           <link
             href="https://fonts.googleapis.com/css?family=Lato:300,400,700,900i&display=swap"
             rel="stylesheet"
           ></link>
+
         </Head>
         <Provider>
           <Component {...pageProps} />
