@@ -19,7 +19,7 @@ const game = () => {
     leaderboard: [],
     ploading: true,
     previous: [],
-    page: 0,
+    page: 1,
     Leaderboard: [],
   });
   useEffect(() => {
@@ -29,7 +29,7 @@ const game = () => {
     let Level;
     let Leaderboard;
     const getLevel = async () => {
-      const url = `https://obscura-microserver.herokuapp.com/getlevel/${
+      const url = `https://obscuramicroserver.azurewebsites.net/getlevel/${
         state.user && state.user.id
       }`;
       console.log("URL", url);
@@ -141,7 +141,7 @@ const game = () => {
         });
 
         const levelName = gstate.level.data.name;
-        const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`;
+        const url = `https://obscuramicroserver.azurewebsites.net/check/${levelName}`;
         const purl = `http://localhost:5000/check/${levelName}`;
         const res = await axios.post(url, body, config);
         console.log("LEVEL ANSWER", res);
@@ -246,11 +246,10 @@ const game = () => {
     }
   };
   const handleLoad = () => {
+    const page = gstate.page + 1;
     setState({
       ...gstate,
-      Leaderboard: gstate.Leaderboard.concat(
-        gstate.leaderboard.slice(gstate.page + 1 * 10, (gstate.page + 2) * 10)
-      ),
+      Leaderboard: gstate.leaderboard.slice(0, page * 10),
       page: gstate.page + 1,
     });
   };
@@ -388,7 +387,7 @@ const game = () => {
           </div>
           <div>
             <center>
-              {gstate.leaderboard.length / 10 - 1 <= gstate.page ? (
+              {gstate.leaderboard.length === gstate.Leaderboard.length ? (
                 <button onClick={handleLoadless} className="btn">
                   Showless
                 </button>

@@ -13,9 +13,56 @@ const Teamobscura = () => {
         <div className="text">Team ObscurA</div>
       </div>
       <div className="tm-container">
+        <div className="c-text"> Developers </div>{" "}
+        <div className="tm-row">
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnujSharma.jpg?alt=media&token=30c83ca1-5d56-4e3c-9ae0-fdaf4d251ca4"
+            />
+            <div className="t-name">Anuj Sharma</div>
+            <a className="link-t" href="https://github.com/phoenixking25">
+              github
+            </a>
+          </div>
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FKartikYadav.jpg?alt=media&token=961d8b71-bfda-4ae2-b014-9dd498a74644"
+            />
+            <div className="t-name">Kartik Yadav</div>
+            <a className="link-t" href="https://github.com/war-turtle">
+              github
+            </a>
+          </div>
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2Fsaran.jpg?alt=media&token=55015d16-40d6-4811-8fde-d5bcdb5e663b"
+            />
+            <div className="t-name"> Saran </div>{" "}
+            <div>
+              <a className="link-t" href="https://github.com/saranonearth">
+                github
+              </a>
+            </div>
+          </div>{" "}
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FHardik.jpg?alt=media&token=ddd387fd-3771-45e7-a0ca-c404e65d98be"
+            />
+            <div className="t-name"> Hardik </div>{" "}
+            <div>
+              <a className="link-t" href="https://github.com/fusionmaster7">
+                github
+              </a>
+            </div>
+          </div>{" "}
+        </div>
         <div className="c-text">Architects</div>
         <div className="c-text2">Elders</div>
-        <div className="tm-row">
+        <div className="tm-row ">
           <div className="tm-member">
             <img
               className="t-image"
@@ -182,7 +229,7 @@ const Teamobscura = () => {
           </div>
         </div>
         <div className="c-text2">Apprentice</div>
-        <div className="tm-row">
+        <div className="tm-row ">
           <div className="tm-member">
             <img
               className="t-image"
@@ -233,7 +280,7 @@ const Teamobscura = () => {
             <div className="t-name">Mangesh</div>
           </div>
         </div>
-        <div className="tm-row">
+        <div className="tm-row dev">
           <div className="tm-member">
             <img
               className="t-image"
@@ -248,53 +295,6 @@ const Teamobscura = () => {
             />
             <div className="t-name">Harsh</div>
           </div>
-        </div>
-        <div className="c-text"> Developers </div>{" "}
-        <div className="tm-row dev">
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnujSharma.jpg?alt=media&token=30c83ca1-5d56-4e3c-9ae0-fdaf4d251ca4"
-            />
-            <div className="t-name">Anuj Sharma</div>
-            <a className="link-t" href="https://github.com/phoenixking25">
-              github
-            </a>
-          </div>
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FKartikYadav.jpg?alt=media&token=961d8b71-bfda-4ae2-b014-9dd498a74644"
-            />
-            <div className="t-name">Kartik Yadav</div>
-            <a className="link-t" href="https://github.com/war-turtle">
-              github
-            </a>
-          </div>
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2Fsaran.jpg?alt=media&token=55015d16-40d6-4811-8fde-d5bcdb5e663b"
-            />
-            <div className="t-name"> Saran </div>{" "}
-            <div>
-              <a className="link-t" href="https://github.com/saranonearth">
-                github
-              </a>
-            </div>
-          </div>{" "}
-          <div className="tm-member">
-            <img
-              className="t-image"
-              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FHardik.jpg?alt=media&token=ddd387fd-3771-45e7-a0ca-c404e65d98be"
-            />
-            <div className="t-name"> Hardik </div>{" "}
-            <div>
-              <a className="link-t" href="https://github.com/fusionmaster7">
-                github
-              </a>
-            </div>
-          </div>{" "}
         </div>
       </div>
       <div className="footer">
