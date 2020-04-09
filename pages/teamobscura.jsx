@@ -275,6 +275,13 @@ const Teamobscura = () => {
             />
             <div className="t-name">Harsh</div>
           </div>
+          <div className="tm-member">
+            <img
+              className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FPriyank.jpeg?alt=media&token=a807aeb3-3aa9-402d-a3fd-8fb04d643ff8"
+            />
+            <div className="t-name">Priyank</div>
+          </div>
         </div>
         <div className="c-text"> Developers </div>{" "}
         <div className="tm-row dev">
