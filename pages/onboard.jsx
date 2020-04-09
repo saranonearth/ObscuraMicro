@@ -106,6 +106,15 @@ const onboard = () => {
           </form>{" "}
         </div>
       </div>
+      <div className="footer">
+        <div>
+          {" "}
+          developed by{" "}
+          <a target="_blank" className="wb" href="http://gawds.in/">
+            gawds{" "}
+          </a>{" "}
+        </div>{" "}
+      </div>
     </div>
   );
 };
