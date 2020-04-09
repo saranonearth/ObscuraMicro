@@ -1,4 +1,4 @@
-const Navbar = ({ onBoard, loginHandler, logouthandler, state }) => {
+const Navbar = ({ noNeed, onBoard, loginHandler, logouthandler, state }) => {
   return (
     <div>
       <div className="nav">
@@ -19,12 +19,12 @@ const Navbar = ({ onBoard, loginHandler, logouthandler, state }) => {
               </button>
             </div>
           ) : (
-            <div>
-              <button className="btn" onClick={loginHandler}>
-                Play Game
+                <div>
+                  <button className="btn" onClick={loginHandler}>
+                    Play Game
               </button>
-            </div>
-          )}
+                </div>
+              )}
         </div>
       </div>
     </div>

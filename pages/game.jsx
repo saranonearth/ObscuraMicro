@@ -31,7 +31,7 @@ const game = () => {
       const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
       try {
         const res = await axios.get(
-          purl
+          url
         );
 
         console.log("RESP", res);
@@ -135,7 +135,7 @@ const game = () => {
         const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`
         const purl = `http://localhost:5000/check/${levelName}`
         const res = await axios.post(
-          purl,
+          url,
           body,
           config
         );
@@ -329,7 +329,7 @@ const game = () => {
                         }}
                       />
                     </div>{" "}
-                    <div className="pl-n"> {p.name} </div>{" "}
+                    <div className="pl-n"> {p.gameName} </div>{" "}
                   </div>{" "}
                   <div className="lb-player"> {p.levelsSolved}</div>{" "}
                   <div className="lb-player"> {p.time}</div>{" "}
