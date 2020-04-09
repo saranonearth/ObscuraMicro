@@ -166,11 +166,10 @@ const index = () => {
     window.scrollTo(0, 0);
   };
   const handleLoad = () => {
+    const page = gstate.page + 1;
     setState({
       ...gstate,
-      Leaderboard: gstate.Leaderboard.concat(
-        gstate.leaderboard.slice(gstate.page + 1 * 10, (gstate.page + 2) * 10)
-      ),
+      Leaderboard: gstate.leaderboard.slice(0, page * 10),
       page: gstate.page + 1,
     });
   };
@@ -237,7 +236,7 @@ const index = () => {
             </div>
             <div>
               <center>
-                {gstate.leaderboard.length / 10 - 1 <= gstate.page ? (
+                {gstate.leaderboard.length === gstate.Leaderboard.length ? (
                   <button onClick={handleLoadless} className="btn">
                     Showless
                   </button>
