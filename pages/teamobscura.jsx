@@ -48,55 +48,56 @@ const Teamobscura = () => {
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnshulMalik.jpg?alt=media&token=c0ca42ca-00e4-4641-97d2-744e6ab156f7"
             />
-            <div className="t-name">Anshul Malik</div>
+            <div className="t-name">Anshul</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FVedantNepal.jpg?alt=media&token=6679b8dc-d92d-40b9-891d-829a34c50c36"
             />
-            <div className="t-name">Vedant Nepal</div>
+            <div className="t-name">Vedant</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FVatsal%20Garg.jpg?alt=media&token=cb259980-b4c9-4b25-a53a-db4374c6c391"
             />
-            <div className="t-name">Vatsal Garg</div>
+            <div className="t-name">Vatsal</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FIMG-20190113-WA0043.jpg?alt=media&token=a8c10714-75ba-4969-88aa-d9cc8734f6c0"
             />
+            <div className="t-name">Prasana</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FSrijan%20Saxena.jpg?alt=media&token=30a0c414-5c3f-4455-af2e-e4be27eed59f"
             />
-            <div className="t-name">Srijan Saxena</div>
+            <div className="t-name">Srijan</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FUtkarsh%20Kumar.jpg?alt=media&token=25abb44f-56a0-4a83-947e-ff1bbd0e6ce9"
             />
-            <div className="t-name">Utkarsh Kumar</div>
+            <div className="t-name">Utkarsh</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FSaqibKamal.jpg?alt=media&token=1508c52c-24fb-48f1-a1fc-dc58af835625"
             />
-            <div className="t-name">Saqib Kamal</div>
+            <div className="t-name">Saqib</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FPrashantKumar.jpg?alt=media&token=55f57edd-04ac-4192-aad2-98e59d62d09f"
             />
-            <div className="t-name">Prashant Kumar</div>
+            <div className="t-name">Prashant</div>
           </div>
         </div>
         <div className="tm-row">
@@ -105,7 +106,7 @@ const Teamobscura = () => {
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FIMG-20190113-WA0041.jpg?alt=media&token=e71049a9-70d4-46a0-9930-a2b0d407c6f4"
             />
-            <div className="t-name"></div>
+            <div className="t-name">Pranjal</div>
           </div>
           <div className="tm-member">
             <img
@@ -119,14 +120,14 @@ const Teamobscura = () => {
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FDevayanMishra.jpg?alt=media&token=90e8c0eb-9b5c-4b7c-b584-b4822e29c05d"
             />
-            <div className="t-name">Devayan Mishra</div>
+            <div className="t-name">Devayan</div>
           </div>
           <div className="tm-member">
             <img
               className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2F12087904_1047786278566471_6169075697809371159_o.jpg?alt=media&token=a496f020-597c-4a2e-b80a-85a3c73004cb"
             />
-            <div className="t-name"></div>
+            <div className="t-name">Chirantan</div>
           </div>
           <div className="tm-member">
             <img
@@ -157,6 +158,7 @@ const Teamobscura = () => {
             <div className="t-name">Rajan Nagpal</div>
           </div>
         </div>
+        <div className="c-text2">Commanders</div>
         <div className="tm-row">
           <div className="tm-member">
             <img
@@ -193,6 +195,9 @@ const Teamobscura = () => {
             />
             <div className="t-name">Avinash</div>
           </div>
+        </div>
+        <div className="c-text2">Quartermasters</div>
+        <div className="tm-row">
           <div className="tm-member">
             <img
               className="t-image"
@@ -215,6 +220,7 @@ const Teamobscura = () => {
             <div className="t-name">Yaseen</div>
           </div>
         </div>
+        <div className="c-text2">Apprentice</div>
         <div className="tm-row">
           <div className="tm-member">
             <img

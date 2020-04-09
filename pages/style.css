@@ -342,8 +342,8 @@ a {
 
 .c-text2 {
   text-align: center;
-  padding: 18px 0px;
-  font-size: 1.9em;
+  padding: 5px 0px;
+  font-size: 1.2em;
   font-weight: 600;
   opacity: 0.6;
   text-decoration: underline;
@@ -365,7 +365,7 @@ a {
 }
 
 .mt-b {
-  margin-bottom: 50px;
+  margin-bottom: 120px;
 }
 
 @media (max-width: 800px) {
