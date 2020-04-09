@@ -290,6 +290,7 @@ button {
   margin-top: 10px;
   text-align: center;
 }
+
 .item-card {
   background: #000;
   color: white;
@@ -301,14 +302,17 @@ button {
   box-shadow: 0 12px 10px -10px rgba(0, 0, 0, 0.3);
   border-radius: 6px;
 }
+
 .item-card:hover {
   background-color: rgb(31, 31, 31);
   cursor: pointer;
 }
+
 .pl {
   text-align: left;
   justify-content: flex-start;
 }
+
 .d-center {
   position: absolute;
   top: 50%;
@@ -316,29 +320,64 @@ button {
   text-align: center;
   transform: translate(-50%, -50%);
 }
+
 .tm-container {
-  display: block;
+  width: 80%;
+  margin: auto;
 }
+
+.t-image {
+  width: 120px;
+  height: 120px;
+  filter: grayscale(100%);
+}
+
+.tm-member {
+  margin: 15px;
+}
+
+a {
+  color: #000;
+}
+
+.c-text2 {
+  text-align: center;
+  padding: 18px 0px;
+  font-size: 1.9em;
+  font-weight: 600;
+  opacity: 0.6;
+  text-decoration: underline;
+}
+
+.c-text {
+  text-align: center;
+  padding: 18px 0px;
+  font-size: 1.9em;
+  font-weight: 600;
+  opacity: 0.6;
+}
+
 .tm-row {
   display: flex;
-  margin-bottom: 15px;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
 }
-.tm-member {
-  padding: 15px;
-  margin: 0px 10px;
+
+.mt-b {
+  margin-bottom: 50px;
 }
-.t-image {
-  width: 170px;
-  height: 170px;
-  margin-bottom: 10px;
-}
-.t-name {
-  font-size: 17px;
-}
+
 @media (max-width: 800px) {
+
+  .link-t {
+    font-size: 0.8em;
+  }
+
   .no-mobile {
     display: none;
   }
+
   .con-2 {
     margin-bottom: 100px;
   }
@@ -399,24 +438,28 @@ button {
   .banner2 {
     height: 30vh;
   }
+
   .name {
     font-size: 0.4em !important;
   }
+
   .bio {
     font-size: 0.3em;
   }
+
   .profile-image {
     width: 60px;
     height: 60px;
   }
-  .tm-row {
-    flex-wrap: wrap;
-  }
+
+
   .t-image {
-    width: 150px;
-    height: 150px;
+    width: 50px;
+    height: 50px;
   }
+
   .t-name {
-    width: 150px;
+    font-size: 0.8em;
+    ;
   }
 }

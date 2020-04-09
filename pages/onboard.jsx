@@ -9,7 +9,7 @@ const onboard = () => {
   const { state, dispatch } = useContext(Store);
   const [istate, setState] = useState({
     gameName: "",
-    bio: ""
+    bio: "",
   });
   const router = useRouter();
   useEffect(() => {
@@ -18,13 +18,13 @@ const onboard = () => {
     }
   }, [state]);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     setState({
       ...istate,
-      [e.target.name]: e.target.value
+      [e.target.name]: e.target.value,
     });
   };
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     const now = format(new Date(), "MM/dd/yyyy");
     e.preventDefault();
     const { gameName, bio } = istate;
@@ -36,7 +36,7 @@ const onboard = () => {
         gameName,
         bio,
         image: state.user.image,
-        levelsSolved: 0
+        levelsSolved: 0,
       })
       .then(() => {
         dispatch({
@@ -44,8 +44,8 @@ const onboard = () => {
           payload: {
             id: router.query.w,
             gameName,
-            bio
-          }
+            bio,
+          },
         });
       });
   };
@@ -54,13 +54,13 @@ const onboard = () => {
     auth
       .signOut()
       .then(() => {
-        console.log("Done");
+        // console.log("Done");
         router.push("/");
         dispatch({
-          type: "LOGOUT"
+          type: "LOGOUT",
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
