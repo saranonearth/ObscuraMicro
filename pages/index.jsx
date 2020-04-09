@@ -38,8 +38,8 @@ const index = () => {
       .ref(`/users`)
       .once("value")
       .then((data) => {
-        console.log(data.val());
-        console.log("LEADERBOARD", data.val());
+        // console.log(data.val());
+        // console.log("LEADERBOARD", data.val());
         if (data.val()) {
           const obj = data.val();
           const result = Object.keys(obj).map((item, index) => {
@@ -110,11 +110,11 @@ const index = () => {
         dispatch({
           type: "LOADING_END",
         });
-        console.log("getUser");
-        console.log(res.val());
+        // console.log("getUser");
+        // console.log(res.val());
         rUser = res.val();
         if (rUser) {
-          console.log("here");
+          // console.log("here");
           Router.push("/game");
           dispatch({
             type: "LOGIN",
@@ -152,7 +152,7 @@ const index = () => {
         dispatch({
           type: "LOADING_END",
         });
-        console.log("getUserError");
+        // console.log("getUserError");
         console.log(error);
       });
   };

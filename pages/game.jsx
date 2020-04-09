@@ -32,26 +32,26 @@ const game = () => {
       const url = `https://obscuramicroserver.azurewebsites.net/getlevel/${
         state.user && state.user.id
       }`;
-      console.log("URL", url);
+      // console.log("URL", url);
       const purl = `http://localhost:5000/getlevel/${
         state.user && state.user.id
       }`;
       try {
         const res = await axios.get(url);
 
-        console.log("RESP", res);
+        // console.log("RESP", res);
 
         Level = res.data;
 
         const day = format(new Date(), "iiii");
-        console.log("DAY", day);
+        // console.log("DAY", day);
         firebase
           .database()
           .ref(`/users`)
           .once("value")
           .then((data) => {
-            console.log(data.val());
-            console.log("LEADERBOARD", data.val());
+            // console.log(data.val());
+            // console.log("LEADERBOARD", data.val());
             if (data.val()) {
               const obj = data.val();
               const result = Object.keys(obj).map((item, index) => {
@@ -91,14 +91,14 @@ const game = () => {
       }
     };
 
-    console.log("CALLING GET FUNCTION");
+    // console.log("CALLING GET FUNCTION");
     if (state.user && state.user.id) {
       getLevel();
     }
   }, []);
 
   const handleChange = (e) => {
-    console.log(gstate);
+    // console.log(gstate);
     setState({
       ...gstate,
       answer: e.target.value,
@@ -130,11 +130,11 @@ const game = () => {
             "content-type": "application/json",
           },
         };
-        console.log("INPUT", {
-          answer: gstate.answer,
-          id: state.user.id,
-          time: new Date(),
-        });
+        // console.log("INPUT", {
+        //   answer: gstate.answer,
+        //   id: state.user.id,
+        //   time: new Date(),
+        // });
         setState({
           ...gstate,
           loading: true,
@@ -144,7 +144,7 @@ const game = () => {
         const url = `https://obscuramicroserver.azurewebsites.net/check/${levelName}`;
         const purl = `http://localhost:5000/check/${levelName}`;
         const res = await axios.post(url, body, config);
-        console.log("LEVEL ANSWER", res);
+        // console.log("LEVEL ANSWER", res);
 
         if (res.data.message === "CORRECT") {
           setTimeout(() => {
@@ -216,7 +216,7 @@ const game = () => {
     auth
       .signOut()
       .then(() => {
-        console.log("Done");
+        // console.log("Done");
         router.push("/");
         dispatch({
           type: "LOGOUT",
@@ -261,7 +261,7 @@ const game = () => {
     });
     window.scrollTo(0, 0);
   };
-  console.log("GSTATE", gstate);
+  // console.log("GSTATE", gstate);
   return (
     <div>
       <div className="bar"> </div>{" "}
