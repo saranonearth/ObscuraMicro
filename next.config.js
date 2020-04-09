@@ -1,6 +1,7 @@
 const webpack = require("webpack");
 const withCSS = require("@zeit/next-css");
 require("dotenv").config();
+const withImages = require('next-images')
 
 module.exports = withCSS({
   webpack: config => {
@@ -12,3 +13,4 @@ module.exports = withCSS({
     return config;
   }
 });
+

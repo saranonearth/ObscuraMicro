@@ -1,9 +1,10 @@
 import { useState, useEffect, useContext } from "react";
-import { firebase } from "../lib/firebase";
+import { firebase, auth } from "../lib/firebase";
 import { useRouter } from "next/router";
 import Navbar from "../components/Navbar";
 import Store from "../Store/Context";
 import { v4 as uuidv4 } from "uuid";
+import { format } from "date-fns";
 const onboard = () => {
   const { state, dispatch } = useContext(Store);
   const [istate, setState] = useState({
@@ -24,6 +25,7 @@ const onboard = () => {
     });
   };
   const handleSubmit = async e => {
+    const now = format(new Date(), "MM/dd/yyyy");
     e.preventDefault();
     const { gameName, bio } = istate;
     await firebase
@@ -33,7 +35,8 @@ const onboard = () => {
         id: router.query.w,
         gameName,
         bio,
-        levelsSolved: []
+        image: state.user.image,
+        levelsSolved: 0
       })
       .then(() => {
         dispatch({

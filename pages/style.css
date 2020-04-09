@@ -261,6 +261,7 @@ input {
   padding: 5px;
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2) !important;
   border-radius: 5px;
+  text-align: center;
 }
 
 button {
@@ -289,8 +290,36 @@ button {
   margin-top: 10px;
   text-align: center;
 }
-
+.item-card{
+  background: #000;
+  color: white;
+  display: flex;
+  justify-content: center;
+  padding: 30px;
+  align-items: center;
+  margin-top: 20px;
+  box-shadow:0 12px 10px -10px rgba(0,0,0,0.3);
+  border-radius: 6px;
+}
+.item-card:hover{
+  background-color: rgb(31, 31, 31);
+  cursor: pointer;
+}
+.pl{
+  text-align: left;
+  justify-content: flex-start;
+}
+.d-center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%,-50%);
+}
 @media (max-width: 800px) {
+  .no-mobile{
+    display: none;
+  }
   .con-2 {
     margin-bottom: 100px;
   }
