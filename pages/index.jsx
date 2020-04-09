@@ -159,7 +159,8 @@ const index = () => {
         <Navbar state={state} loginHandler={loginHandler} />
         <div className="banner">
           <div className="text">
-            ObscurA Quarantine Special :p
+            ObscurA Quarantine Special :p<br />
+            <p>Wash your hands before you start :)</p>
           </div>
         </div>
         <div className="container">

@@ -309,7 +309,17 @@ button {
   text-align: left;
   justify-content: flex-start;
 }
+.d-center{
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  transform: translate(-50%,-50%);
+}
 @media (max-width: 800px) {
+  .no-mobile{
+    display: none;
+  }
   .con-2 {
     margin-bottom: 100px;
   }

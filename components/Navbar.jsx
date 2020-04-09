@@ -3,7 +3,7 @@ const Navbar = ({ noNeed, onBoard, loginHandler, logouthandler, state }) => {
     <div>
       <div className="nav">
         <div className="navbar">
-          <div className="title">ObscurA Micro</div>
+          <div className="title">ObscurA </div>
           {onBoard ? (
             <div>
               {" "}

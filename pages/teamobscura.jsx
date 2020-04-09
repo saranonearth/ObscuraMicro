@@ -7,7 +7,7 @@ const Teamobscura = () => {
             <div className="bar"> </div>{" "}
             <div className="nav">
                 <div className="navbar">
-                    <div className="title">ObscurA Micro</div>
+                    <div className="title">ObscurA</div>
 
                 </div>
             </div>

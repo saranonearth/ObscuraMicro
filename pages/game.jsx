@@ -28,6 +28,7 @@ const game = () => {
     let Leaderboard;
     const getLevel = async () => {
       const url = `https://obscura-microserver.herokuapp.com/getlevel/${state.user && state.user.id}`
+      console.log("URL", url)
       const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
       try {
         const res = await axios.get(
@@ -84,7 +85,10 @@ const game = () => {
     };
 
     console.log("CALLING GET FUNCTION");
-    getLevel();
+    if (state.user && state.user.id) {
+      getLevel();
+    }
+
 
   }, []);
 
@@ -344,13 +348,15 @@ const game = () => {
                 </div>
             }
           </div>{" "}
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
-          <br />
+          <div className="no-mobile">
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+            <br />
+          </div>
           <br />
         </div>{" "}
         <div className="con-2">
