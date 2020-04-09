@@ -2,7 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import Store from "../Store/Context";
 import { useRouter } from "next/router";
 import { auth } from "../lib/firebase.js";
-import Link from 'next/link'
+import Link from "next/link";
 import Navbar from "../components/Navbar";
 import Countdown from "react-countdown";
 import axios from "axios";
@@ -18,7 +18,7 @@ const game = () => {
     level: null,
     leaderboard: [],
     ploading: true,
-    previous: []
+    previous: [],
   });
   useEffect(() => {
     if (!state.isAuth) {
@@ -27,56 +27,60 @@ const game = () => {
     let Level;
     let Leaderboard;
     const getLevel = async () => {
-      const url = `https://obscura-microserver.herokuapp.com/getlevel/${state.user && state.user.id}`
-      console.log("URL", url)
-      const purl = `http://localhost:5000/getlevel/${state.user && state.user.id}`
+      const url = `https://obscura-microserver.herokuapp.com/getlevel/${
+        state.user && state.user.id
+      }`;
+      console.log("URL", url);
+      const purl = `http://localhost:5000/getlevel/${
+        state.user && state.user.id
+      }`;
       try {
-        const res = await axios.get(
-          url
-        );
+        const res = await axios.get(url);
 
         console.log("RESP", res);
 
-        Level = res.data
-
+        Level = res.data;
 
         const day = format(new Date(), "iiii");
-        console.log("DAY", day)
+        console.log("DAY", day);
         firebase
           .database()
           .ref(`/users`)
           .once("value")
-          .then(data => {
-            console.log(data.val())
+          .then((data) => {
+            console.log(data.val());
             console.log("LEADERBOARD", data.val());
             if (data.val()) {
-              const obj = data.val()
+              const obj = data.val();
               const result = Object.keys(obj).map((item, index) => {
-                return obj[item]
-              })
+                return obj[item];
+              });
               const sorted = result.sort((a, b) => {
                 if (a.levelsSolved > b.levelsSolved) return -1;
                 if (a.levelsSolved < b.levelsSolved) return 1;
                 if (a.time > b.time) return 1;
                 if (a.time < b.time) return -1;
-              })
-              Leaderboard = sorted.slice(0, 11)
+              });
+              Leaderboard = sorted.slice(0, 11);
             } else {
-              Leaderboard = []
+              Leaderboard = [];
             }
 
-            firebase.database().ref('/notifications/').once("value").then(data => {
-
-              setState({
-                ...gstate,
-                leaderboard: Leaderboard,
-                level: Level,
-                ploading: false,
-                previous: (data.val() === null) ? [] : data.val()
-              })
-            })
+            firebase
+              .database()
+              .ref("/notifications/")
+              .once("value")
+              .then((data) => {
+                setState({
+                  ...gstate,
+                  leaderboard: Leaderboard,
+                  level: Level,
+                  ploading: false,
+                  previous: data.val() === null ? [] : data.val(),
+                });
+              });
           })
-          .catch(res => {
+          .catch((res) => {
             console.log(res);
           });
       } catch (error) {
@@ -88,62 +92,57 @@ const game = () => {
     if (state.user && state.user.id) {
       getLevel();
     }
-
-
   }, []);
 
-  const handleChange = e => {
+  const handleChange = (e) => {
     console.log(gstate);
     setState({
       ...gstate,
-      answer: e.target.value
+      answer: e.target.value,
     });
   };
 
-  const handleSubmit = async e => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     if (!gstate.answer) {
       setState({
         ...gstate,
-        message: "Answer field is empty"
+        message: "Answer field is empty",
       });
 
       setTimeout(() => {
         setState({
           ...gstate,
-          message: ""
+          message: "",
         });
       }, 3000);
     } else {
       try {
         const body = {
           answer: gstate.answer,
-          id: state.user.id
+          id: state.user.id,
         };
         const config = {
           headers: {
-            "content-type": "application/json"
-          }
+            "content-type": "application/json",
+          },
         };
         console.log("INPUT", {
           answer: gstate.answer,
           id: state.user.id,
-          time: new Date()
+          time: new Date(),
         });
         setState({
           ...gstate,
-          loading: true
+          loading: true,
         });
 
-        const levelName = gstate.level.data.name
-        const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`
-        const purl = `http://localhost:5000/check/${levelName}`
-        const res = await axios.post(
-          url,
-          body,
-          config
-        );
+        const levelName = gstate.level.data.name;
+        const url = `https://obscura-microserver.herokuapp.com/check/${levelName}`;
+        const purl = `http://localhost:5000/check/${levelName}`;
+        const res = await axios.post(url, body, config);
         console.log("LEVEL ANSWER", res);
+
         if (res.data.message === "CORRECT") {
           setTimeout(() => {
             location.reload();
@@ -151,52 +150,59 @@ const game = () => {
           if (res.data.data === "NO_MORE_LEVELS") {
             setState({
               ...gstate,
+              answer: "",
               loading: false,
               message: "CORRECT",
               level: {
-                message: "NO_MORE_LEVELS"
-              }
+                message: "NO_MORE_LEVELS",
+              },
             });
           } else {
             setState({
               ...gstate,
+              answer: "",
               loading: false,
               message: "CORRECT",
-              level: res.data
+              level: res.data,
             });
           }
         }
         if (res.data.message === "LATE") {
           setState({
             ...gstate,
+            answer: "",
             loading: false,
-            message: "LATE"
+            message: "LATE",
           });
         }
         if (res.data.message === "WRONG") {
           setState({
             ...gstate,
+            answer: "",
             loading: false,
-            message: "WRONG"
+            message: "WRONG",
           });
         }
 
         setTimeout(() => {
           setState({
             ...gstate,
-            message: ""
+            answer: "",
+            message: "",
           });
         }, 3000);
       } catch (error) {
         setState({
           ...gstate,
-          message: "Server Error"
+          answer: "",
+          message: "Server Error",
         });
 
         setTimeout(() => {
           setState({
             ...gstate,
-            message: ""
+            answer: "",
+            message: "",
           });
         }, 3000);
         console.log(error);
@@ -210,10 +216,10 @@ const game = () => {
         console.log("Done");
         router.push("/");
         dispatch({
-          type: "LOGOUT"
+          type: "LOGOUT",
         });
       })
-      .catch(e => {
+      .catch((e) => {
         console.log(e);
       });
   };
@@ -222,7 +228,6 @@ const game = () => {
   // const isStart = () => {
   //   return compareAsc(new Date(), new Date(gstate.level.data.startTime))
   // }
-
 
   const renderer = ({ hours, minutes, seconds, completed }) => {
     if (completed) {
@@ -260,17 +265,21 @@ const game = () => {
       <div className="container">
         <div className="con-1">
           <div className="leaderboard wd game-img">
-            {gstate.ploading ? <p>Loading...</p> : gstate.level && gstate.level.message === "NO_MORE_LEVELS" ? (
+            {gstate.ploading ? (
+              <p>Loading...</p>
+            ) : gstate.level && gstate.level.message === "NO_MORE_LEVELS" ? (
               <>
-
                 <p>Game Over</p> <p>See you tomorrow</p>
               </>
-            ) : gstate.level.message === "WAIT" ? <>
-              <p>Next Level will be available soon</p>
-            </> : <>
-                  <p className="c-1">{gstate.level && gstate.level.data.name}</p>
+            ) : gstate.level.message === "WAIT" ? (
+              <>
+                <p>Next Level will be available soon</p>
+              </>
+            ) : (
+              <>
+                <p className="c-1">{gstate.level && gstate.level.data.name}</p>
 
-                  {/* <p className="mt">
+                {/* <p className="mt">
                 <Countdown
                   date={
                     new Date(`${gstate.level && gstate.level.data.endTime}`)
@@ -278,33 +287,31 @@ const game = () => {
                   renderer={renderer}
                 />
               </p> */}
-                  <img
-                    src={gstate.level && gstate.level.data.data}
-                    className="game-img"
-                    alt="game-image"
-                    onError={(e) => {
-                      e.target.src = "https://via.placeholder.com/150"
-                    }}
-                  />
-                  <br />
-                  <div>
-                    <form onSubmit={handleSubmit}>
-                      <input
-                        type="text"
-                        onChange={handleChange}
-                        value={gstate.answer}
-                        name="answer"
-                      />
-                      <div>
-                        {gstate.loading ? (
-                          <p className="mt-1">Checking..</p>
-                        ) : (
-                            <button className="btn">Submit</button>
-                          )}
-                      </div>
-                    </form>
-                  </div>
-                </>}
+                <img
+                  src={gstate.level && gstate.level.data.data}
+                  className="game-img"
+                  alt="game-image"
+                />
+                <br />
+                <div>
+                  <form onSubmit={handleSubmit}>
+                    <input
+                      type="text"
+                      onChange={handleChange}
+                      value={gstate.answer}
+                      name="answer"
+                    />
+                    <div>
+                      {gstate.loading ? (
+                        <p className="mt-1">Checking..</p>
+                      ) : (
+                        <button className="btn">Submit</button>
+                      )}
+                    </div>
+                  </form>
+                </div>
+              </>
+            )}
           </div>
           {gstate.message ? <p className="alert">{gstate.message}</p> : null}
           <br />
@@ -316,37 +323,48 @@ const game = () => {
               <div> Rank </div> <div> Player </div>{" "}
               <div className="mt-l"> Solved </div> <div> Time(mins) </div>{" "}
             </div>{" "}
-            {
-              !gstate.ploading ? gstate.leaderboard.length > 0 ? gstate.leaderboard.map((p, index) => {
-                return <div key={index} className="tr">
-                  <div className="lb-player rk ">
-                    <div> {index + 1}</div>{" "}
-                  </div>{" "}
-                  <div className="lb-player pl">
-                    <div>
-                      <img
-                        className="lb-img"
-                        src={p.image}
-                        alt={p.gameName}
-                        onError={(e) => {
-                          e.target.src = "https://via.placeholder.com/150"
-                        }}
-                      />
-                    </div>{" "}
-                    <div className="pl-n"> {p.gameName} </div>{" "}
-                  </div>{" "}
-                  <div className="lb-player"> {p.levelsSolved}</div>{" "}
-                  <div className="lb-player"> {p.time}</div>{" "}
-                </div>
-
-              }) : <div>
+            {!gstate.ploading ? (
+              gstate.leaderboard.length > 0 ? (
+                gstate.leaderboard.map((p, index) => {
+                  return (
+                    <div key={index} className="tr">
+                      <div className="lb-player rk ">
+                        <div> {index + 1}</div>{" "}
+                      </div>{" "}
+                      <div className="lb-player pl">
+                        <div>
+                          <img
+                            className="lb-img"
+                            src={p.image}
+                            alt={p.gameName}
+                            onError={(e) => {
+                              e.target.src = "https://via.placeholder.com/150";
+                            }}
+                          />
+                        </div>{" "}
+                        <div className="pl-n"> {p.gameName} </div>{" "}
+                      </div>{" "}
+                      <div className="lb-player"> {p.levelsSolved}</div>{" "}
+                      <div className="lb-player"> {p.time}</div>{" "}
+                    </div>
+                  );
+                })
+              ) : (
+                <div>
                   <br />
-                  <center><p>No entries yet</p></center>
-                </div> : <div>
-                  <br />
-                  <center><p>Loading..</p></center>
+                  <center>
+                    <p>No entries yet</p>
+                  </center>
                 </div>
-            }
+              )
+            ) : (
+              <div>
+                <br />
+                <center>
+                  <p>Loading..</p>
+                </center>
+              </div>
+            )}
           </div>{" "}
           <div className="no-mobile">
             <br />
@@ -362,25 +380,35 @@ const game = () => {
         <div className="con-2">
           <Link href="/teamobscura">
             <div className="item-card">
-              <div><p>Team ObscurA</p></div>
+              <div>
+                <p>Team ObscurA</p>
+              </div>
             </div>
           </Link>
           <p className="sub-title"> Notifications </p>{" "}
           <div className="daily">
-
-            {
-              gstate.ploading ? <p>Loading</p> : !gstate.previous.length > 0 ? <p>No entries yet</p> : gstate.previous.map((d, i) => <div key={i} className="tr">
-                <div>
-                  {d}
+            {gstate.ploading ? (
+              <p>Loading</p>
+            ) : !gstate.previous.length > 0 ? (
+              <p>No entries yet</p>
+            ) : (
+              gstate.previous.map((d, i) => (
+                <div key={i} className="tr">
+                  <div>{d}</div>
                 </div>
-
-              </div>)
-            }
+              ))
+            )}
           </div>
         </div>
       </div>
       <div className="footer">
-        <div> developed by gawds </div>{" "}
+        <div>
+          {" "}
+          developed by{" "}
+          <a target="_blank" className="wb" href="http://gawds.in/">
+            gawds
+          </a>
+        </div>{" "}
       </div>
     </div>
   );
