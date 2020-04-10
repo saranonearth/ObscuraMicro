@@ -38,7 +38,7 @@ const game = () => {
       }`;
       try {
         const res = await axios.get(url);
-
+        // console.log("LEVEL", res);
         // console.log("RESP", res);
 
         Level = res.data;
@@ -166,7 +166,6 @@ const game = () => {
               answer: "",
               loading: false,
               message: "CORRECT",
-              level: res.data,
             });
           }
         }
@@ -190,8 +189,8 @@ const game = () => {
         setTimeout(() => {
           setState({
             ...gstate,
-            answer: "",
             message: "",
+            answer: "",
           });
         }, 3000);
       } catch (error) {

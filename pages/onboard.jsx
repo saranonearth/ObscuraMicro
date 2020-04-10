@@ -35,6 +35,7 @@ const onboard = () => {
         id: router.query.w,
         gameName,
         bio,
+        name: state.user.name,
         image: state.user.image,
         levelsSolved: 0,
       })

@@ -18,6 +18,13 @@ const Teamobscura = () => {
           <div className="tm-member">
             <img
               className="t-image"
+              src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnshulMalik.jpg?alt=media&token=c0ca42ca-00e4-4641-97d2-744e6ab156f7"
+            />
+            <div className="t-name">Anshul</div>
+          </div>
+          <div className="tm-member">
+            <img
+              className="t-image"
               src="https://firebasestorage.googleapis.com/v0/b/obscuramini-967ea.appspot.com/o/Team%2FAnujSharma.jpg?alt=media&token=30c83ca1-5d56-4e3c-9ae0-fdaf4d251ca4"
             />
             <div className="t-name">Anuj Sharma</div>

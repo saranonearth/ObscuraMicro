@@ -23,6 +23,7 @@ const index = () => {
       type: "LOADING_BEGIN",
     });
     firebase.auth().onAuthStateChanged((authUser) => {
+      // console.log(authUser);
       if (authUser) {
         const uid = authUser.uid;
         authUtil(authUser, uid);
@@ -88,6 +89,7 @@ const index = () => {
       .signInWithPopup(provider)
       .then((result) => {
         let User = result.user;
+        // console.log("USER", User);
         const uid = User.uid;
         dispatch({
           type: "LOADING_BEGIN",
