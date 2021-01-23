@@ -1,4 +1,4 @@
-## ObscuraMini
+## ObscuraMicro
 ObscuraMini is a promotion event for Obscura 7.5 game. 
 Built on React SSR using Nextjs.
 
