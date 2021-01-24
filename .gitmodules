@@ -1,0 +1,4 @@
+[submodule "obscuraMicroServer"]
+	path = obscuraMicroServer
+	url = git@github.com:ArucsbO/obscuraMicroServer.git
+	branch = master
